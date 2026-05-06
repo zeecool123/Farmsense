@@ -53,6 +53,7 @@ Getting Started
 Install dependencies
 
 cd HiveDeliver
+
 npm install
 
 Start the development server
