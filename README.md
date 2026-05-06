@@ -51,6 +51,7 @@ If you are developing a production application, we recommend using TypeScript wi
 Getting Started
 
 Install dependencies
+
 cd HiveDeliver
 npm install
 
