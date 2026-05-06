@@ -1,4 +1,4 @@
-🌿 SmartCrop AI: Precision Autonomous Farming
+🌿 Farmsense: Precision Autonomous Farming
 An AI-driven ecosystem that replicates "perfect" growing conditions using real-time sensor data and automated climate control.
 
 💡 The Problem
