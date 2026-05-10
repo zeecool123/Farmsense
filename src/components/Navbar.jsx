@@ -108,16 +108,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-                >
-                  🚪 {t('logout')}
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </nav>
-  );
-};
-
-export default Navbar;
