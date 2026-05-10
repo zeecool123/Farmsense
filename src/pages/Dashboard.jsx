@@ -87,51 +87,40 @@ const Dashboard = () => {
           <div className="relative z-10">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{t('quickActions')}</h2>
             <p className="text-gray-700 dark:text-gray-300 mb-6">{t('jumpIntoWorkflows')}</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Link
-                to="/trays"
-                className="btn-primary inline-block text-center"
-              >
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Link to="/trays" className="btn-primary inline-block text-center">
                 {t('manageTrays')}
               </Link>
-              <Link
-                to="/analytics"
-                className="btn-secondary inline-block text-center"
-              >
+              <Link to="/analytics" className="btn-secondary inline-block text-center">
                 {t('viewAnalytics')}
               </Link>
-            <Link
-              to="/ml-insights"
-              className="rounded-xl bg-white text-blue-700 px-4 py-3 font-semibold text-sm shadow hover:bg-slate-100 transition"
-            >
-              {t('mlInsights')}
-            </Link>
-            <Link
-              to="/settings"
-              className="rounded-xl bg-white text-blue-700 px-4 py-3 font-semibold text-sm shadow hover:bg-slate-100 transition"
-            >
-              {t('systemSettings')}
-            </Link>
+              <Link to="/ml-insights" className="btn-secondary inline-block text-center">
+                {t('mlInsights')}
+              </Link>
+              <Link to="/settings" className="btn-secondary inline-block text-center">
+                {t('systemSettings')}
+              </Link>
+            </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow p-6 border border-slate-100">
-          <h2 className="text-2xl font-bold mb-3">{t('howToUseFarmsense')}</h2>
-          <ol className="list-decimal list-inside space-y-3 text-slate-700">
-            <li>{t('assignYourTrays')}</li>
-            <li>{t('monitorLiveConditions')}</li>
-            <li>{t('trackTrends')}</li>
-            <li>{t('reviewAIInsights')}</li>
-            <li>{t('adjustPreferences')}</li>
+        <div className="glass-card mt-6 p-8">
+          <h3 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">{t('howToUseFarmsense')}</h3>
+          <ol className="list-decimal list-inside space-y-3 text-gray-700 dark:text-gray-300">
+            <li className="text-base">{t('assignYourTrays')}</li>
+            <li className="text-base">{t('monitorLiveConditions')}</li>
+            <li className="text-base">{t('trackTrends')}</li>
+            <li className="text-base">{t('reviewAIInsights')}</li>
+            <li className="text-base">{t('adjustPreferences')}</li>
           </ol>
         </div>
       </div>
 
       {/* Alerts Section */}
       {alerts.length > 0 && (
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-4">{t('recentAlerts')} ({alerts.length})</h2>
-          <div className="max-w-3xl">
+        <div className="mb-10">
+          <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">{t('recentAlerts')} <span className="text-emerald-600">({alerts.length})</span></h2>
+          <div className="max-w-4xl space-y-3">
             {alerts.slice(0, 5).map((alert) => (
               <AlertBox
                 key={alert.id}
@@ -144,27 +133,27 @@ const Dashboard = () => {
       )}
 
       {/* ML Insights Quick Link */}
-      <div className="mb-8">
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg shadow-md p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div>
-            <p className="text-sm uppercase tracking-widest text-blue-200">{t('aiDrivenInsights')}</p>
-            <h2 className="text-3xl font-bold mt-2">{t('exploreMLInsights')}</h2>
-            <p className="mt-2 text-blue-100 max-w-xl">
-              {t('goToMLInsights')} {t('viewAnalytics')}
-            </p>
+      <div className="mb-10">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-600 to-indigo-600 p-10 shadow-lg">
+          <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_80%_20%,rgba(255,255,255,0.5),transparent_60%)]"></div>
+          <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+            <div>
+              <p className="text-sm uppercase tracking-widest text-blue-100 font-semibold">{t('aiDrivenInsights')}</p>
+              <h2 className="text-4xl font-bold text-white mt-3">{t('exploreMLInsights')}</h2>
+              <p className="mt-3 text-blue-100 max-w-2xl text-lg">
+                {t('goToMLInsights')} • {t('viewAnalytics')}
+              </p>
+            </div>
+            <Link to="/ml-insights" className="btn-secondary whitespace-nowrap text-blue-600">
+              {t('goToMLInsights')} →
+            </Link>
           </div>
-          <Link
-            to="/ml-insights"
-            className="inline-flex items-center justify-center bg-white text-blue-700 font-semibold rounded-lg px-5 py-3 shadow hover:bg-slate-100 transition"
-          >
-            {t('goToMLInsights')}
-          </Link>
         </div>
       </div>
 
       {/* Trays Grid */}
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">{t('trayStatus')}</h2>
+      <div className="mb-10">
+        <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">{t('trayStatus')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {TRAY_IDS.map((trayId) => {
             const tray = trays[trayId];
@@ -184,41 +173,41 @@ const Dashboard = () => {
 
       {/* Selected Tray Details */}
       {selectedTrayData && (
-        <div className="bg-white rounded-lg shadow-md p-6 space-y-6">
+        <div className="glass-card p-10 space-y-8 mb-10 animate-slide-up">
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold">{t('trayDetails', { trayId: selectedTray })}</h2>
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">{t('trayDetails', { trayId: selectedTray })}</h2>
             <button
               onClick={() => setSelectedTray(null)}
-              className="text-gray-400 hover:text-gray-600 text-2xl"
+              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-3xl transition-colors"
             >
               ✕
             </button>
           </div>
 
           {/* Tray Info */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 border-b pb-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-6 border-b border-gray-200 dark:border-gray-700 pb-8">
             <div>
-              <p className="text-gray-600 text-sm">{t('cropLabel')}</p>
-              <p className="text-lg font-bold flex items-center gap-2">
+              <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">{t('cropLabel')}</p>
+              <p className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
                 {selectedTrayData.crop?.icon} {selectedTrayData.crop?.name}
               </p>
             </div>
             <div>
-              <p className="text-gray-600 text-sm">{t('statusLabel')}</p>
-              <p className="text-lg font-bold text-green-600">
+              <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">{t('statusLabel')}</p>
+              <p className="text-xl font-bold text-emerald-600 dark:text-emerald-400">
                 🟢 {selectedTrayData.status}
               </p>
             </div>
             <div>
-              <p className="text-gray-600 text-sm">{t('aiScoreLabel')}</p>
-              <p className="text-lg font-bold text-blue-600">{aiScores[selectedTray] || 0}/100</p>
+              <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">{t('aiScoreLabel')}</p>
+              <p className="text-xl font-bold text-blue-600 dark:text-blue-400">{aiScores[selectedTray] || 0}/100</p>
             </div>
           </div>
 
           {/* Real-time Sensor Data */}
           {selectedSensorData ? (
             <div>
-              <h3 className="text-xl font-bold mb-4">{t('liveSensorReadings')}</h3>
+              <h3 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">{t('liveSensorReadings')}</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <SensorReading
                   label={t('temperature') || 'Temperature'}
@@ -266,28 +255,28 @@ const Dashboard = () => {
               </div>
             </div>
           ) : (
-            <p className="text-gray-500">{t('waitingForSensorData')}</p>
+            <p className="text-gray-500 dark:text-gray-400 text-lg">{t('waitingForSensorData')}</p>
           )}
 
           {/* Test Controls */}
-          <div className="border-t pt-4">
-            <h3 className="text-lg font-bold mb-3">{t('testControls')}</h3>
-            <div className="flex gap-2 flex-wrap">
+          <div className="border-t border-gray-200 dark:border-gray-700 pt-8">
+            <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">{t('testControls')}</h3>
+            <div className="flex gap-3 flex-wrap">
               <button
                 onClick={() => simulateAnomaly(selectedTray, 'temperature')}
-                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 text-sm"
+                className="btn-primary"
               >
                 {t('simulateTempAnomaly')}
               </button>
               <button
                 onClick={() => simulateAnomaly(selectedTray, 'humidity')}
-                className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 text-sm"
+                className="btn-primary"
               >
                 {t('simulateHumidityAnomaly')}
               </button>
               <button
                 onClick={() => resetAnomaly(selectedTray)}
-                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 text-sm"
+                className="btn-secondary"
               >
                 {t('resetToNormal') || 'Reset to Normal'}
               </button>
