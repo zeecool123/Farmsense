@@ -1,4 +1,8 @@
+
+import React, { useState, useMemo, useEffect } from 'react';
+
 import React, { useState, useMemo } from 'react';
+
 import { useApp } from '../context/AppContext';
 import { useLanguage } from '../context/LanguageContext';
 import { TRAY_IDS } from '../utils/constants';
@@ -9,6 +13,10 @@ import {
   predictWaterConsumption,
   predictResourceEfficiency,
   predictAnomalies,
+
+  getAIRecommendations,
+
+
 } from '../utils/mlPredictions';
 
 const MLInsights = () => {
@@ -17,9 +25,33 @@ const MLInsights = () => {
   const [selectedTray, setSelectedTray] = useState('A');
   const [growthStage, setGrowthStage] = useState('vegetative');
 
+  const [aiRecommendations, setAiRecommendations] = useState(null);
+
+
+
   const tray = trays[selectedTray];
   const currentSensorData = sensorData[selectedTray];
   const selectedTrayHistory = sensorHistory[selectedTray] || [];
+
+
+  // Load AI recommendations
+  useEffect(() => {
+    const loadRecommendations = async () => {
+      if (tray?.cropKey && currentSensorData) {
+        try {
+          const recs = await getAIRecommendations(tray.cropKey, currentSensorData);
+          setAiRecommendations(recs);
+        } catch (error) {
+          console.error('Error loading AI recommendations:', error);
+          setAiRecommendations(null);
+        }
+      } else {
+        setAiRecommendations(null);
+      }
+    };
+    loadRecommendations();
+  }, [tray?.cropKey, currentSensorData]);
+
 
   const mockHistory = useMemo(() => {
     return Array.from({ length: 20 }, (_, i) => ({
@@ -113,6 +145,54 @@ const MLInsights = () => {
           </div>
         </div>
       </div>
+
+
+      {/* AI Recommendations */}
+      {aiRecommendations && (
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <h2 className="text-2xl font-bold mb-4">🤖 {t('aiRecommendations')}</h2>
+          <div className="mb-4">
+            <div className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${
+              aiRecommendations.overallStatus === 'optimal' ? 'bg-green-100 text-green-800' :
+              aiRecommendations.overallStatus === 'good' ? 'bg-blue-100 text-blue-800' :
+              'bg-yellow-100 text-yellow-800'
+            }`}>
+              {aiRecommendations.overallStatus === 'optimal' ? '✅ Optimal' :
+               aiRecommendations.overallStatus === 'good' ? '🟢 Good' :
+               '🟡 Needs Attention'}
+            </div>
+            <p className="text-sm text-gray-600 mt-2">{aiRecommendations.summary}</p>
+          </div>
+          {aiRecommendations.recommendations.length > 0 && (
+            <div className="space-y-3">
+              {aiRecommendations.recommendations.map((rec, idx) => (
+                <div key={idx} className={`p-4 rounded-lg border-l-4 ${
+                  rec.priority === 'high' ? 'border-red-500 bg-red-50' :
+                  rec.priority === 'medium' ? 'border-yellow-500 bg-yellow-50' :
+                  'border-blue-500 bg-blue-50'
+                }`}>
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="font-semibold text-gray-900">{rec.parameter}</h3>
+                      <p className="text-sm text-gray-700 mt-1">{rec.action}</p>
+                      <p className="text-xs text-gray-600 mt-1">{rec.reason}</p>
+                    </div>
+                    <div className={`px-2 py-1 rounded text-xs font-semibold ${
+                      rec.priority === 'high' ? 'bg-red-200 text-red-800' :
+                      rec.priority === 'medium' ? 'bg-yellow-200 text-yellow-800' :
+                      'bg-blue-200 text-blue-800'
+                    }`}>
+                      {rec.priority.toUpperCase()}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+
 
       {/* Tray Info */}
       {tray && (
