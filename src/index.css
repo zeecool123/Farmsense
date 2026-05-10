@@ -3,24 +3,24 @@
 @tailwind utilities;
 
 :root {
-  --text: #6b7280;
+  --text: #374151;
   --text-h: #111827;
-  --bg: #fafbfc;
-  --border: #e5e7eb;
-  --code-bg: #f3f4f6;
+  --bg: #f8fafc;
+  --border: #d1d5db;
+  --code-bg: #e5e7eb;
   --accent: #10b981;
-  --accent-bg: rgba(16, 185, 129, 0.1);
-  --accent-border: rgba(16, 185, 129, 0.3);
-  --social-bg: rgba(249, 250, 251, 0.8);
+  --accent-bg: rgba(16, 185, 129, 0.14);
+  --accent-border: rgba(16, 185, 129, 0.35);
+  --social-bg: rgba(249, 250, 251, 0.9);
   --shadow:
-    rgba(0, 0, 0, 0.06) 0 2px 8px, rgba(0, 0, 0, 0.04) 0 1px 2px;
+    rgba(15, 23, 42, 0.08) 0 2px 8px, rgba(15, 23, 42, 0.04) 0 1px 2px;
 
-  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
-  --heading: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+  --sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --heading: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --mono: ui-monospace, 'SF Mono', Monaco, 'Cascadia Code', monospace;
 
-  font: 16px/1.6 var(--sans);
-  letter-spacing: -0.2px;
+  font: 18px/1.75 var(--sans);
+  letter-spacing: 0.15px;
   color-scheme: light dark;
   color: var(--text);
   background: var(--bg);
@@ -37,27 +37,32 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --text: #d1d5db;
-    --text-h: #f9fafb;
-    --bg: #0f1117;
-    --border: #30363d;
-    --code-bg: #161b22;
+    --text-h: #f8fafc;
+    --bg: #0f172a;
+    --border: #334155;
+    --code-bg: #111827;
     --accent: #10b981;
-    --accent-bg: rgba(16, 185, 129, 0.15);
-    --accent-border: rgba(16, 185, 129, 0.4);
-    --social-bg: rgba(22, 27, 34, 0.8);
+    --accent-bg: rgba(16, 185, 129, 0.18);
+    --accent-border: rgba(16, 185, 129, 0.5);
+    --social-bg: rgba(15, 23, 42, 0.88);
     --shadow:
-      rgba(0, 0, 0, 0.3) 0 2px 8px, rgba(0, 0, 0, 0.15) 0 1px 2px;
+      rgba(0, 0, 0, 0.5) 0 2px 8px, rgba(0, 0, 0, 0.25) 0 1px 2px;
   }
 }
 
 body {
   margin: 0;
+  font-family: var(--sans);
+  font-size: 18px;
+  line-height: 1.75;
+  color: var(--text);
   background: linear-gradient(135deg, #fafbfc 0%, #f0f4f8 100%);
 }
 
 @media (prefers-color-scheme: dark) {
   body {
     background: linear-gradient(135deg, #0f1117 0%, #1a1f2e 100%);
+    color: var(--text);
   }
 }
 
