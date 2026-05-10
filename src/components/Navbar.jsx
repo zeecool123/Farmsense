@@ -22,7 +22,6 @@ const Navbar = () => {
   };
 
   const userName = currentUser?.displayName || currentUser?.email?.split('@')[0] || 'Farmer';
-  const userLabel = isGuest ? ' (Guest)' : '';
 
   return (
     <nav className="sticky top-0 z-40 backdrop-blur-xl bg-white/70 dark:bg-gray-900/70 border-b border-gray-200/30 dark:border-gray-700/30">
