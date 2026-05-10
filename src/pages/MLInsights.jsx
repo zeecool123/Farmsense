@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useApp } from '../context/AppContext';
+import { useLanguage } from '../context/LanguageContext';
 import { TRAY_IDS } from '../utils/constants';
 import {
   predictCropYield,
@@ -11,14 +12,15 @@ import {
 } from '../utils/mlPredictions';
 
 const MLInsights = () => {
-  const { trays, sensorData } = useApp();
+  const { trays, sensorData, sensorHistory } = useApp();
+  const { t } = useLanguage();
   const [selectedTray, setSelectedTray] = useState('A');
   const [growthStage, setGrowthStage] = useState('vegetative');
 
   const tray = trays[selectedTray];
   const currentSensorData = sensorData[selectedTray];
+  const selectedTrayHistory = sensorHistory[selectedTray] || [];
 
-  // Generate mock historical data for predictions
   const mockHistory = useMemo(() => {
     return Array.from({ length: 20 }, (_, i) => ({
       aiScore: 60 + Math.random() * 40,
@@ -29,20 +31,21 @@ const MLInsights = () => {
     }));
   }, [selectedTray, currentSensorData]);
 
-  // Calculate predictions
+  const historyForPrediction = selectedTrayHistory.length > 0 ? selectedTrayHistory : mockHistory;
+
   const yieldPrediction = useMemo(
-    () => tray?.cropKey ? predictCropYield(mockHistory, tray.cropKey) : null,
-    [tray?.cropKey, mockHistory]
+    () => (tray?.cropKey ? predictCropYield(historyForPrediction, tray.cropKey) : null),
+    [tray?.cropKey, historyForPrediction]
   );
 
   const harvestPrediction = useMemo(
-    () => tray?.cropKey ? predictHarvestTime(tray.cropKey, mockHistory, 25) : null,
-    [tray?.cropKey, mockHistory]
+    () => (tray?.cropKey ? predictHarvestTime(tray.cropKey, historyForPrediction, 25) : null),
+    [tray?.cropKey, historyForPrediction]
   );
 
   const nutrients = useMemo(
-    () => tray?.cropKey ? estimateNutrientRequirements(tray.cropKey, mockHistory, growthStage) : null,
-    [tray?.cropKey, mockHistory, growthStage]
+    () => tray?.cropKey ? estimateNutrientRequirements(tray.cropKey, historyForPrediction, growthStage) : null,
+    [tray?.cropKey, historyForPrediction, growthStage]
   );
 
   const water = useMemo(
@@ -53,18 +56,18 @@ const MLInsights = () => {
     [tray?.cropKey, currentSensorData]
   );
 
-  const efficiency = useMemo(() => predictResourceEfficiency(mockHistory), [mockHistory]);
+  const efficiency = useMemo(() => predictResourceEfficiency(historyForPrediction), [historyForPrediction]);
 
   const anomalies = useMemo(
-    () => tray?.cropKey ? predictAnomalies(mockHistory, tray.cropKey) : null,
-    [tray?.cropKey, mockHistory]
+    () => tray?.cropKey ? predictAnomalies(historyForPrediction, tray.cropKey) : null,
+    [tray?.cropKey, historyForPrediction]
   );
 
   if (!tray) {
     return (
       <div className="p-8">
-        <h1 className="text-4xl font-bold text-gray-800 mb-2">ML Insights</h1>
-        <p className="text-gray-600">No tray selected</p>
+        <h1 className="text-4xl font-bold text-gray-800 mb-2">{t('mlInsights')}</h1>
+        <p className="text-gray-600">{t('noTraySelected')}</p>
       </div>
     );
   }
@@ -72,15 +75,18 @@ const MLInsights = () => {
   return (
     <div className="p-8">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-800 mb-2">🤖 ML Insights & Predictions</h1>
-        <p className="text-gray-600">AI-powered predictions for optimal farming</p>
+        <h1 className="text-4xl font-bold text-gray-800 mb-2">🤖 {t('mlInsights')}</h1>
+        <p className="text-gray-600">{t('aiPoweredPredictions')}</p>
+        <p className="text-sm text-gray-500 mt-1">
+          {selectedTrayHistory.length > 0 ? t('usingRealTrayHistory') : t('usingFallbackSensorData')}
+        </p>
       </div>
 
       {/* Controls */}
       <div className="bg-white rounded-lg shadow-md p-6 mb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-semibold mb-2">Select Tray</label>
+            <label className="block text-sm font-semibold mb-2">{t('selectTrayLabel')}</label>
             <select
               value={selectedTray}
               onChange={(e) => setSelectedTray(e.target.value)}
@@ -88,21 +94,21 @@ const MLInsights = () => {
             >
               {TRAY_IDS.map((id) => (
                 <option key={id} value={id}>
-                  Tray {id} {trays[id]?.crop?.icon}
+                  {t('tray')} {id} {trays[id]?.crop?.icon}
                 </option>
               ))}
             </select>
           </div>
           <div>
-            <label className="block text-sm font-semibold mb-2">Growth Stage</label>
+            <label className="block text-sm font-semibold mb-2">{t('growthStageLabel')}</label>
             <select
               value={growthStage}
               onChange={(e) => setGrowthStage(e.target.value)}
               className="w-full border rounded px-4 py-2"
             >
-              <option value="vegetative">🌿 Vegetative</option>
-              <option value="flowering">🌸 Flowering</option>
-              <option value="fruiting">🍓 Fruiting</option>
+              <option value="vegetative">🌿 {t('vegetative')}</option>
+              <option value="flowering">🌸 {t('flowering')}</option>
+              <option value="fruiting">🍓 {t('fruiting')}</option>
             </select>
           </div>
         </div>
@@ -113,20 +119,20 @@ const MLInsights = () => {
         <div className="bg-gradient-to-r from-purple-500 to-blue-600 text-white rounded-lg shadow-md p-6 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-              <p className="text-purple-100 text-sm">Crop</p>
+              <p className="text-purple-100 text-sm">{t('cropLabel')}</p>
               <p className="text-2xl font-bold">{tray.crop?.name} {tray.crop?.icon}</p>
             </div>
             <div>
-              <p className="text-purple-100 text-sm">Growth Stage</p>
-              <p className="text-xl font-bold capitalize">{growthStage}</p>
+              <p className="text-purple-100 text-sm">{t('growStageLabel')}</p>
+              <p className="text-xl font-bold capitalize">{t(growthStage)}</p>
             </div>
             <div>
-              <p className="text-purple-100 text-sm">Days Since Planted</p>
-              <p className="text-2xl font-bold">25 days</p>
+              <p className="text-purple-100 text-sm">{t('daysSincePlanted')}</p>
+              <p className="text-2xl font-bold">25 {t('days')}</p>
             </div>
             <div>
-              <p className="text-purple-100 text-sm">Status</p>
-              <p className="text-xl font-bold">🟢 Healthy</p>
+              <p className="text-purple-100 text-sm">{t('statusLabel')}</p>
+              <p className="text-xl font-bold">🟢 {t('healthy')}</p>
             </div>
           </div>
         </div>
@@ -134,22 +140,21 @@ const MLInsights = () => {
 
       {/* Main Predictions Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        {/* Crop Yield Prediction */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold mb-4">📊 Yield Prediction</h2>
+          <h2 className="text-2xl font-bold mb-4">📊 {t('yieldPredictionTitle')}</h2>
           {yieldPrediction && (
             <div className="space-y-4">
               <div className="text-center py-4 bg-gradient-to-r from-green-100 to-green-50 rounded-lg">
-                <p className="text-gray-600 text-sm">Estimated Yield</p>
+                <p className="text-gray-600 text-sm">{t('estimatedYield')}</p>
                 <p className="text-5xl font-bold text-green-600">{yieldPrediction.estimatedYield}</p>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-gray-50 p-3 rounded">
-                  <p className="text-sm text-gray-600">Confidence</p>
+                  <p className="text-sm text-gray-600">{t('confidence')}</p>
                   <p className="text-2xl font-bold text-blue-600">{yieldPrediction.confidence}%</p>
                 </div>
                 <div className="bg-gray-50 p-3 rounded">
-                  <p className="text-sm text-gray-600">Trend</p>
+                  <p className="text-sm text-gray-600">{t('trendLabel')}</p>
                   <p className="text-xl font-bold capitalize">
                     {yieldPrediction.trend === 'improving' ? '📈' :
                      yieldPrediction.trend === 'declining' ? '📉' : '➡️'} {yieldPrediction.trend}
@@ -163,22 +168,21 @@ const MLInsights = () => {
           )}
         </div>
 
-        {/* Harvest Time Prediction */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold mb-4">🌾 Harvest Prediction</h2>
+          <h2 className="text-2xl font-bold mb-4">🌾 {t('harvestPredictionTitle')}</h2>
           {harvestPrediction && (
             <div className="space-y-4">
               <div className="text-center py-4 bg-gradient-to-r from-amber-100 to-amber-50 rounded-lg">
-                <p className="text-gray-600 text-sm">Maturity</p>
+                <p className="text-gray-600 text-sm">{t('maturity')}</p>
                 <p className="text-5xl font-bold text-amber-600">{harvestPrediction.maturityPercent}%</p>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-gray-50 p-3 rounded">
-                  <p className="text-sm text-gray-600">Days to Harvest</p>
+                  <p className="text-sm text-gray-600">{t('daysToHarvest')}</p>
                   <p className="text-2xl font-bold text-orange-600">{harvestPrediction.daysToHarvest}</p>
                 </div>
                 <div className="bg-gray-50 p-3 rounded">
-                  <p className="text-sm text-gray-600">Est. Date</p>
+                  <p className="text-sm text-gray-600">{t('estimatedDate')}</p>
                   <p className="text-sm font-bold">{harvestPrediction.estimatedHarvestDate}</p>
                 </div>
               </div>
@@ -192,9 +196,8 @@ const MLInsights = () => {
 
       {/* Nutrients & Water */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        {/* Nutrient Requirements */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold mb-4">🧪 Nutrient Requirements</h2>
+          <h2 className="text-2xl font-bold mb-4">🧪 {t('nutrientRequirements')}</h2>
           {nutrients && (
             <div className="space-y-4">
               <p className="text-sm text-gray-600 mb-3">{nutrients.recommendation}</p>
@@ -240,26 +243,25 @@ const MLInsights = () => {
           )}
         </div>
 
-        {/* Water Prediction */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold mb-4">💧 Water Consumption Forecast</h2>
+          <h2 className="text-2xl font-bold mb-4">💧 {t('waterConsumptionForecast')}</h2>
           {water && (
             <div className="space-y-4">
               <div className="text-center py-4 bg-gradient-to-r from-cyan-100 to-cyan-50 rounded-lg">
-                <p className="text-gray-600 text-sm">Predicted Daily Usage</p>
+                <p className="text-gray-600 text-sm">{t('predictedDailyUsage')}</p>
                 <p className="text-4xl font-bold text-cyan-600">{water.predictedDailyUsage}</p>
               </div>
               <div className="bg-gray-50 p-4 rounded">
-                <p className="text-sm font-semibold mb-2">Adjustment Factors</p>
+                <p className="text-sm font-semibold mb-2">{t('adjustmentFactors')}</p>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span>Adjustment:</span>
+                    <span>{t('adjustmentLabel')}</span>
                     <span className={water.adjustment > 0 ? 'text-red-600' : 'text-green-600'}>
                       {water.adjustment > 0 ? '+' : ''}{water.adjustment}%
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Reason:</span>
+                    <span>{t('reasonLabel')}</span>
                     <span className="font-semibold">{water.adjustmentReason}</span>
                   </div>
                 </div>
@@ -269,15 +271,13 @@ const MLInsights = () => {
         </div>
       </div>
 
-      {/* Resource Efficiency & Anomalies */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Resource Efficiency */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold mb-4">⚡ Resource Efficiency</h2>
+          <h2 className="text-2xl font-bold mb-4">⚡ {t('resourceEfficiency')}</h2>
           {efficiency && (
             <div className="space-y-4">
               <div className="text-center py-4 bg-gradient-to-r from-indigo-100 to-indigo-50 rounded-lg">
-                <p className="text-gray-600 text-sm">Efficiency Score</p>
+                <p className="text-gray-600 text-sm">{t('efficiencyScore')}</p>
                 <p className="text-5xl font-bold text-indigo-600">{efficiency.score}</p>
                 <p className="text-sm font-semibold text-indigo-700 mt-1">{efficiency.efficiency}</p>
               </div>
@@ -286,17 +286,14 @@ const MLInsights = () => {
                 efficiency.score >= 60 ? 'bg-yellow-50 border-yellow-500' :
                 'bg-red-50 border-red-500'
               }`}>
-                <p className="text-sm font-semibold">
-                  {efficiency.recommendation}
-                </p>
+                <p className="text-sm font-semibold">{efficiency.recommendation}</p>
               </div>
             </div>
           )}
         </div>
 
-        {/* Anomaly Detection */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold mb-4">🚨 Anomaly Detection</h2>
+          <h2 className="text-2xl font-bold mb-4">🚨 {t('anomalyDetection')}</h2>
           {anomalies && (
             <div className="space-y-4">
               <div className="text-center py-4 rounded-lg" style={{
@@ -305,7 +302,7 @@ const MLInsights = () => {
                                  anomalies.riskLevel === 'medium' ? '#dbeafe' :
                                  '#dcfce7',
               }}>
-                <p className="text-gray-600 text-sm">Risk Level</p>
+                <p className="text-gray-600 text-sm">{t('riskLevelLabel')}</p>
                 <p className="text-3xl font-bold capitalize" style={{
                   color: anomalies.riskLevel === 'critical' ? '#dc2626' :
                          anomalies.riskLevel === 'high' ? '#ca8a04' :
@@ -333,7 +330,7 @@ const MLInsights = () => {
                 </div>
               ) : (
                 <div className="p-3 rounded bg-green-100 text-green-800 text-sm">
-                  ✅ No anomalies detected. System operating normally.
+                  {t('noAnomaliesDetected')}
                 </div>
               )}
             </div>

@@ -1,48 +1,103 @@
+import { auth } from '../config/firebase';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
-  updateProfile,
-  setPersistence,
-  browserLocalPersistence,
-  sendPasswordResetEmail,
+  updateProfile
 } from 'firebase/auth';
-import { auth, db } from '../config/firebase';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
 
-/**
- * Enable session persistence
- */
-export const enablePersistence = async () => {
+// Fallback localStorage implementation
+const USERS_KEY = 'farmsense_users_dev';
+const CURRENT_USER_KEY = 'farmsense_current_user_dev';
+
+const getStoredUsers = () => {
   try {
-    await setPersistence(auth, browserLocalPersistence);
+    return JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
   } catch (error) {
-    console.error('Error setting persistence:', error);
+    console.error('Error reading stored users:', error);
+    return [];
   }
 };
 
-/**
- * Sign up with email and password
- */
-export const signUpUser = async (email, password, displayName) => {
-  try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
+const saveStoredUsers = (users) => {
+  localStorage.setItem(USERS_KEY, JSON.stringify(users));
+};
 
-    // Update profile with display name
-    if (displayName) {
+const saveCurrentUser = (user) => {
+  if (user) {
+    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+  } else {
+    localStorage.removeItem(CURRENT_USER_KEY);
+  }
+};
+
+const getCurrentStoredUser = () => {
+  try {
+    return JSON.parse(localStorage.getItem(CURRENT_USER_KEY) || 'null');
+  } catch (error) {
+    console.error('Error reading current user:', error);
+    return null;
+  }
+};
+
+// Check if Firebase is properly configured
+const isFirebaseConfigured = auth !== null;
+
+export const enablePersistence = async () => {
+  if (isFirebaseConfigured) {
+    // Firebase handles persistence automatically
+    return Promise.resolve();
+  }
+  return Promise.resolve();
+};
+
+export const signUpUser = async (email, password, displayName) => {
+  if (isFirebaseConfigured) {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Update display name
       await updateProfile(user, {
-        displayName,
+        displayName: displayName || 'Farmer'
       });
+
+      return {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName || displayName || 'Farmer',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        preferences: {
+          alertNotifications: true,
+          dailyReports: true,
+          dataRefreshInterval: 5,
+        },
+      };
+    } catch (error) {
+      throw error;
+    }
+  } else {
+    // Fallback to localStorage
+    const users = getStoredUsers();
+
+    if (users.some((user) => user.email === email)) {
+      const error = new Error('Email already in use');
+      error.code = 'auth/email-already-in-use';
+      throw error;
     }
 
-    // Create user document in Firestore
-    await setDoc(doc(db, 'users', user.uid), {
-      uid: user.uid,
-      email: user.email,
+    if (password.length < 6) {
+      const error = new Error('Password must be at least 6 characters');
+      error.code = 'auth/weak-password';
+      throw error;
+    }
+
+    const newUser = {
+      uid: `user_${Date.now()}`,
+      email,
       displayName: displayName || 'Farmer',
-      photoURL: user.photoURL || null,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       preferences: {
@@ -50,112 +105,111 @@ export const signUpUser = async (email, password, displayName) => {
         dailyReports: true,
         dataRefreshInterval: 5,
       },
-    });
+      password, // Store password for localStorage fallback
+    };
 
-    return user;
-  } catch (error) {
-    console.error('Signup error:', error);
-    throw error;
+    users.push(newUser);
+    saveStoredUsers(users);
+    saveCurrentUser({ ...newUser, password: undefined });
+    return { ...newUser, password: undefined };
   }
 };
 
-/**
- * Sign in with email and password
- */
 export const signInUser = async (email, password) => {
-  try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    return userCredential.user;
-  } catch (error) {
-    console.error('Sign in error:', error);
-    throw error;
-  }
-};
+  if (isFirebaseConfigured) {
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
-/**
- * Sign out current user
- */
-export const signOutUser = async () => {
-  try {
-    await signOut(auth);
-  } catch (error) {
-    console.error('Sign out error:', error);
-    throw error;
-  }
-};
-
-/**
- * Get current user
- */
-export const getCurrentUser = () => {
-  return auth.currentUser;
-};
-
-/**
- * Subscribe to auth state changes
- */
-export const onAuthChange = (callback) => {
-  return onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      // Fetch user profile from Firestore
-      try {
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
-        const userProfile = userDoc.data();
-        callback({
-          ...user,
-          profile: userProfile,
-        });
-      } catch (error) {
-        console.error('Error fetching profile:', error);
-        callback(user);
-      }
-    } else {
-      callback(null);
+      return {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName || 'Farmer',
+        createdAt: user.metadata.creationTime,
+        updatedAt: user.metadata.lastSignInTime,
+        preferences: {
+          alertNotifications: true,
+          dailyReports: true,
+          dataRefreshInterval: 5,
+        },
+      };
+    } catch (error) {
+      throw error;
     }
-  });
+  } else {
+    // Fallback to localStorage
+    const users = getStoredUsers();
+    const user = users.find((u) => u.email === email);
+
+    if (!user) {
+      const error = new Error('No account found with this email');
+      error.code = 'auth/user-not-found';
+      throw error;
+    }
+
+    if (user.password !== password) {
+      const error = new Error('Incorrect password');
+      error.code = 'auth/wrong-password';
+      throw error;
+    }
+
+    const safeUser = { ...user, password: undefined };
+    saveCurrentUser(safeUser);
+    return safeUser;
+  }
 };
 
-/**
- * Update user profile
- */
-export const updateUserProfile = async (userId, profileData) => {
-  try {
-    const userRef = doc(db, 'users', userId);
-    await setDoc(
-      userRef,
-      {
-        ...profileData,
-        updatedAt: new Date().toISOString(),
+export const signOutUser = async () => {
+  if (isFirebaseConfigured) {
+    await signOut(auth);
+  } else {
+    saveCurrentUser(null);
+  }
+};
+
+export const onAuthChange = (callback) => {
+  if (isFirebaseConfigured) {
+    return onAuthStateChanged(auth, (user) => {
+      if (user) {
+        callback({
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName || 'Farmer',
+          createdAt: user.metadata.creationTime,
+          updatedAt: user.metadata.lastSignInTime,
+          preferences: {
+            alertNotifications: true,
+            dailyReports: true,
+            dataRefreshInterval: 5,
+          },
+        });
+      } else {
+        callback(null);
+      }
+    });
+  } else {
+    // Fallback: simulate auth state change with stored user
+    const user = getCurrentStoredUser();
+    callback(user);
+    return () => {};
+  }
+};
+
+export const getCurrentUser = () => {
+  if (isFirebaseConfigured) {
+    return auth.currentUser ? {
+      uid: auth.currentUser.uid,
+      email: auth.currentUser.email,
+      displayName: auth.currentUser.displayName || 'Farmer',
+      createdAt: auth.currentUser.metadata.creationTime,
+      updatedAt: auth.currentUser.metadata.lastSignInTime,
+      preferences: {
+        alertNotifications: true,
+        dailyReports: true,
+        dataRefreshInterval: 5,
       },
-      { merge: true }
-    );
-  } catch (error) {
-    console.error('Error updating profile:', error);
-    throw error;
-  }
-};
-
-/**
- * Get user profile
- */
-export const getUserProfile = async (userId) => {
-  try {
-    const userDoc = await getDoc(doc(db, 'users', userId));
-    return userDoc.data();
-  } catch (error) {
-    console.error('Error fetching profile:', error);
-    throw error;
-  }
-};
-
-/**
- * Reset password (email)
- */
-export const resetPasswordEmail = async (email) => {
-  try {
-    await sendPasswordResetEmail(auth, email);
-  } catch (error) {
-    console.error('Error sending reset email:', error);
-    throw error;
+    } : null;
+  } else {
+    return getCurrentStoredUser();
   }
 };

@@ -9,19 +9,19 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Subscribe to auth state changes
     const unsubscribe = onAuthChange((user) => {
       setCurrentUser(user);
       setLoading(false);
     });
 
-    return unsubscribe;
+    return () => unsubscribe();
   }, []);
 
   const logout = async () => {
     try {
       setError(null);
       await signOutUser();
+      setCurrentUser(null);
     } catch (err) {
       setError(err.message);
     }

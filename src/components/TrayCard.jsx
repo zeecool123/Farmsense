@@ -12,15 +12,15 @@ const TrayCard = ({ trayId, crop, aiScore, status, onClick }) => {
     >
       <div className="flex justify-between items-start mb-4">
         <div>
-          <h3 className="text-xl font-bold">Tray {trayId}</h3>
-          <p className="text-gray-600">{crop?.name || 'Unassigned'}</p>
+          <h3 className="text-xl font-bold">{t('trayLabel', { trayId })}</h3>
+          <p className="text-gray-600">{crop?.name || t('unassigned')}</p>
         </div>
         <span className="text-3xl">{crop?.icon || '❓'}</span>
       </div>
 
       <div className="mb-4">
         <div className="flex justify-between items-center mb-2">
-          <span className="text-sm font-semibold">AI Score</span>
+          <span className="text-sm font-semibold">{t('aiScoreLabel')}</span>
           <span className="text-lg font-bold" style={{ color: scoreColor }}>
             {aiScore || 0}/100
           </span>
@@ -41,7 +41,7 @@ const TrayCard = ({ trayId, crop, aiScore, status, onClick }) => {
           {healthStatus}
         </span>
         <span className={`text-xs font-semibold ${status === 'online' ? 'text-green-600' : 'text-red-600'}`}>
-          {status === 'online' ? '🟢 Online' : '🔴 Offline'}
+          {status === 'online' ? t('onlineStatus') : t('offlineStatus')}
         </span>
       </div>
     </div>

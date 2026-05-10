@@ -2,7 +2,6 @@
  * Hook for fetching and managing tray data
  */
 import { useState, useEffect } from 'react';
-import { getTrayData } from '../services/firebaseService';
 
 export const useTray = (trayId) => {
   const [tray, setTray] = useState(null);
@@ -10,18 +9,16 @@ export const useTray = (trayId) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchTray = async () => {
-      try {
-        const data = await getTrayData(trayId);
-        setTray(data);
-      } catch (err) {
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
+    const mockTray = {
+      id: trayId,
+      name: `Tray ${trayId}`,
+      status: 'online',
+      lastUpdated: new Date().toISOString(),
+      crop: null,
     };
 
-    fetchTray();
+    setTray(mockTray);
+    setLoading(false);
   }, [trayId]);
 
   return { tray, loading, error };
@@ -35,8 +32,6 @@ export const useSensorData = (trayId) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // This would subscribe to real-time updates
-    // subscribeSensorData(trayId, setSensorData);
     setLoading(false);
   }, [trayId]);
 

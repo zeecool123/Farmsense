@@ -1,18 +1,21 @@
 import React from 'react';
+import { useLanguage } from '../context/LanguageContext';
 
 const Settings = () => {
+  const { t } = useLanguage();
+
   return (
-    <div className="p-8">
-      <h1 className="text-4xl font-bold text-gray-800 mb-2">Settings</h1>
-      <p className="text-gray-600 mb-8">Configure your Farmsense system</p>
+    <div className="p-6 max-w-4xl mx-auto">
+      <h1 className="text-4xl font-bold text-gray-800 mb-2">{t('settings')}</h1>
+      <p className="text-gray-600 mb-8">{t('configureSystem')}</p>
 
       <div className="space-y-6 max-w-2xl">
         {/* Account Settings */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold mb-4">Account Settings</h2>
+          <h2 className="text-2xl font-bold mb-4">{t('accountSettings')}</h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-semibold mb-2">Email</label>
+              <label className="block text-sm font-semibold mb-2">{t('emailLabel')}</label>
               <input
                 type="email"
                 className="w-full border rounded px-3 py-2"
@@ -20,7 +23,7 @@ const Settings = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold mb-2">Password</label>
+              <label className="block text-sm font-semibold mb-2">{t('passwordLabel')}</label>
               <input
                 type="password"
                 className="w-full border rounded px-3 py-2"
@@ -28,36 +31,36 @@ const Settings = () => {
               />
             </div>
             <button className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
-              Update
+              {t('update')}
             </button>
           </div>
         </div>
 
         {/* Notifications */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold mb-4">Notifications</h2>
+          <h2 className="text-2xl font-bold mb-4">{t('notificationsHeading')}</h2>
           <div className="space-y-3">
             <label className="flex items-center gap-3">
               <input type="checkbox" defaultChecked className="w-4 h-4" />
-              <span>Critical Alerts</span>
+              <span>{t('criticalAlerts')}</span>
             </label>
             <label className="flex items-center gap-3">
               <input type="checkbox" defaultChecked className="w-4 h-4" />
-              <span>Daily Reports</span>
+              <span>{t('dailyReports')}</span>
             </label>
             <label className="flex items-center gap-3">
               <input type="checkbox" className="w-4 h-4" />
-              <span>Marketing Emails</span>
+              <span>{t('marketingEmails')}</span>
             </label>
           </div>
         </div>
 
         {/* System Settings */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold mb-4">System Settings</h2>
+          <h2 className="text-2xl font-bold mb-4">{t('systemSettings')}</h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-semibold mb-2">Data Refresh Interval (seconds)</label>
+              <label className="block text-sm font-semibold mb-2">{t('dataRefreshInterval')}</label>
               <input
                 type="number"
                 defaultValue="5"
@@ -65,24 +68,24 @@ const Settings = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold mb-2">Alert Sensitivity</label>
+              <label className="block text-sm font-semibold mb-2">{t('alertSensitivity')}</label>
               <select className="w-full border rounded px-3 py-2">
-                <option>Low</option>
-                <option>Medium</option>
-                <option>High</option>
+                <option>{t('low')}</option>
+                <option>{t('medium')}</option>
+                <option>{t('high')}</option>
               </select>
             </div>
             <button className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
-              Save Settings
+              {t('saveSettings')}
             </button>
           </div>
         </div>
 
         {/* Danger Zone */}
         <div className="bg-red-50 rounded-lg shadow-md p-6 border border-red-200">
-          <h2 className="text-2xl font-bold mb-4 text-red-600">Danger Zone</h2>
+          <h2 className="text-2xl font-bold mb-4 text-red-600">{t('dangerZone')}</h2>
           <button className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700">
-            Delete Account
+            {t('deleteAccount')}
           </button>
         </div>
       </div>

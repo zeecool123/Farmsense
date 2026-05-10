@@ -10,9 +10,11 @@ export const AppProvider = ({ children }) => {
   const [alerts, setAlerts] = useState([]);
   const [sensorData, setSensorData] = useState({});
   const [aiScores, setAiScores] = useState({});
+  const [sensorHistory, setSensorHistory] = useState({});
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [useSimulator, setUseSimulator] = useState(true); // Toggle for Firebase vs Simulator
+  const MAX_HISTORY_LENGTH = 60;
 
   // Initialize trays with simulator
   useEffect(() => {
@@ -45,9 +47,10 @@ export const AppProvider = ({ children }) => {
 
           // Subscribe to sensor updates
           simulator.subscribe((data) => {
+            const timestamp = new Date();
             setSensorData((prev) => ({
               ...prev,
-              [id]: { ...data, timestamp: new Date() },
+              [id]: { ...data, timestamp },
             }));
 
             // Calculate AI score
@@ -57,6 +60,8 @@ export const AppProvider = ({ children }) => {
                 ...prev,
                 [id]: score,
               }));
+
+              addSensorHistory(id, { ...data, timestamp, aiScore: score });
 
               // Check for anomalies and create alerts
               checkForAnomalies(id, crop, data, score);
@@ -130,6 +135,16 @@ export const AppProvider = ({ children }) => {
     });
   }, [alerts]);
 
+  // Track sensor history for later predictions
+  const addSensorHistory = useCallback((trayId, entry) => {
+    setSensorHistory((prev) => {
+      const history = prev[trayId] ? [...prev[trayId]] : [];
+      history.push(entry);
+      if (history.length > MAX_HISTORY_LENGTH) history.shift();
+      return { ...prev, [trayId]: history };
+    });
+  }, []);
+
   // Add or update a tray
   const updateTray = useCallback((trayId, trayData) => {
     setTrays((prev) => ({
@@ -161,15 +176,25 @@ export const AppProvider = ({ children }) => {
 
   // Update sensor data for a tray
   const updateSensorData = useCallback((trayId, data) => {
+    const timestamp = new Date();
+    const entry = { ...data, timestamp, aiScore: aiScores[trayId] || 0 };
+
     setSensorData((prev) => ({
       ...prev,
       [trayId]: {
         ...prev[trayId],
         ...data,
-        timestamp: new Date(),
+        timestamp,
       },
     }));
-  }, []);
+
+    setSensorHistory((prev) => {
+      const history = prev[trayId] ? [...prev[trayId]] : [];
+      history.push(entry);
+      if (history.length > MAX_HISTORY_LENGTH) history.shift();
+      return { ...prev, [trayId]: history };
+    });
+  }, [aiScores]);
 
   // Trigger control action
   const triggerControl = useCallback((trayId, controlType, action) => {
@@ -206,6 +231,7 @@ export const AppProvider = ({ children }) => {
     addAlert,
     clearAlert,
     sensorData,
+    sensorHistory,
     updateSensorData,
     aiScores,
     currentUser,
