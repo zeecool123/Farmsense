@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLanguage } from '../context/LanguageContext';
 
-const TrayCard = ({ trayId, crop, aiScore, status, onClick }) => {
+const AreaCard = ({ areaId, crop, aiScore, status, onClick }) => {
   const { t } = useLanguage();
 
   const getStatusColor = (currentStatus) => {
@@ -24,8 +24,8 @@ const TrayCard = ({ trayId, crop, aiScore, status, onClick }) => {
       {/* Header */}
       <div className="flex justify-between items-start mb-6">
         <div>
-          <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1">{t('trayLabel')}</p>
-          <h3 className="text-2xl font-bold text-gray-900 dark:text-white">#{trayId}</h3>
+          <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1">{t('areaLabel')}</p>
+          <h3 className="text-2xl font-bold text-gray-900 dark:text-white">#{areaId}</h3>
         </div>
         <div className="flex items-center gap-2 bg-white/50 dark:bg-gray-800/50 px-3 py-2 rounded-full backdrop-blur-sm">
           <span className={`w-2.5 h-2.5 rounded-full ${getStatusColor(status)} shadow-lg animate-pulse`}></span>
@@ -66,4 +66,4 @@ const TrayCard = ({ trayId, crop, aiScore, status, onClick }) => {
   );
 };
 
-export default TrayCard;
+export default AreaCard;

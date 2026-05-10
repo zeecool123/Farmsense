@@ -129,8 +129,8 @@ export const CROP_PROFILES = {
   },
 };
 
-// Tray identifiers
-export const TRAY_IDS = ['A', 'B', 'C', 'D', 'E', 'F'];
+// Area identifiers
+export const AREA_IDS = ['A', 'B', 'C', 'D', 'E', 'F'];
 
 // AI Scoring thresholds
 export const AI_SCORE_THRESHOLDS = {
