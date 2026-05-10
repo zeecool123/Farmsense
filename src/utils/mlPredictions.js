@@ -239,7 +239,6 @@ export const predictHarvestTime = (cropKey, sensorHistory, plantedDaysAgo) => {
 
   // Estimated growth duration (varies by crop)
   const growthDuration = {
-
     blackgram: 75,
     chickpea: 90,
     grapes: 150,
@@ -250,13 +249,11 @@ export const predictHarvestTime = (cropKey, sensorHistory, plantedDaysAgo) => {
     muskmelon: 80,
     pigeonpeas: 120,
     watermelon: 85,
-  }[cropKey] || 75;
-
     strawberry: 45,
     lettuce: 35,
     tomato: 70,
     basil: 30,
-  }[cropKey] || 45;
+  }[cropKey] || 75;
 
 
   // Calculate maturity percentage based on time
@@ -304,7 +301,6 @@ export const estimateNutrientRequirements = (cropKey, sensorHistory, growthStage
 
   // Base nutrient requirements vary by crop
   const nutrients = {
-
     blackgram: { nitrogen: 20, phosphorus: 40, potassium: 20 },
     chickpea: { nitrogen: 20, phosphorus: 40, potassium: 60 },
     grapes: { nitrogen: 60, phosphorus: 20, potassium: 100 },
@@ -315,13 +311,11 @@ export const estimateNutrientRequirements = (cropKey, sensorHistory, growthStage
     muskmelon: { nitrogen: 80, phosphorus: 40, potassium: 120 },
     pigeonpeas: { nitrogen: 20, phosphorus: 40, potassium: 60 },
     watermelon: { nitrogen: 80, phosphorus: 40, potassium: 120 },
-  }[cropKey] || { nitrogen: 40, phosphorus: 40, potassium: 60 };
-
     strawberry: { nitrogen: 150, phosphorus: 80, potassium: 200 },
     lettuce: { nitrogen: 120, phosphorus: 60, potassium: 150 },
     tomato: { nitrogen: 200, phosphorus: 100, potassium: 250 },
     basil: { nitrogen: 100, phosphorus: 50, potassium: 100 },
-  }[cropKey] || { nitrogen: 150, phosphorus: 75, potassium: 150 };
+  }[cropKey] || { nitrogen: 40, phosphorus: 40, potassium: 60 };
 
 
   // Adjust for growth stage
