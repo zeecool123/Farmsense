@@ -96,7 +96,7 @@ const Navbar = () => {
                   }}
                   className="w-full text-left px-5 py-3 hover:bg-red-50 dark:hover:bg-red-900/20 text-sm text-red-600 dark:text-red-400 border-t border-gray-200/30 dark:border-gray-700/30 transition-colors font-medium"
                 >
-                  🚪 {t('logout', 'Logout')}
+                  🚪 {t('logout')}
                 </button>
               </div>
             )}
