@@ -1,8 +1,6 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 
-import React, { useState, useMemo } from 'react';
-
 import { useApp } from '../context/AppContext';
 import { useLanguage } from '../context/LanguageContext';
 import { TRAY_IDS } from '../utils/constants';
