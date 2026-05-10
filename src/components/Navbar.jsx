@@ -22,7 +22,6 @@ const Navbar = () => {
   };
 
   const userName = currentUser?.displayName || currentUser?.email?.split('@')[0] || 'Farmer';
-  const userLabel = isGuest ? ' (Guest)' : '';
 
   return (
     <nav className="sticky top-0 z-40 backdrop-blur-xl bg-white/70 dark:bg-gray-900/70 border-b border-gray-200/30 dark:border-gray-700/30">
@@ -95,19 +94,6 @@ const Navbar = () => {
                     setShowDropdown(false);
                   }}
                   className="w-full text-left px-5 py-3 hover:bg-red-50 dark:hover:bg-red-900/20 text-sm text-red-600 dark:text-red-400 border-t border-gray-200/30 dark:border-gray-700/30 transition-colors font-medium"
-                >
-                  🚪 {t('logout', 'Logout')}
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </nav>
-  );
-};
-
-export default Navbar;
                 >
                   🚪 {t('logout')}
                 </button>
