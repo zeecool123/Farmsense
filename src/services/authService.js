@@ -11,6 +11,13 @@ import {
 const USERS_KEY = 'farmsense_users_dev';
 const CURRENT_USER_KEY = 'farmsense_current_user_dev';
 
+// --- NEW: Local auth listeners to trigger React state updates ---
+let localAuthListeners = [];
+const notifyLocalAuthListeners = (user) => {
+  localAuthListeners.forEach((callback) => callback(user));
+};
+// ----------------------------------------------------------------
+
 const getStoredUsers = () => {
   try {
     return JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
@@ -45,10 +52,6 @@ const getCurrentStoredUser = () => {
 const isFirebaseConfigured = auth !== null;
 
 export const enablePersistence = async () => {
-  if (isFirebaseConfigured) {
-    // Firebase handles persistence automatically
-    return Promise.resolve();
-  }
   return Promise.resolve();
 };
 
@@ -58,7 +61,6 @@ export const signUpUser = async (email, password, displayName) => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Update display name
       await updateProfile(user, {
         displayName: displayName || 'Farmer'
       });
@@ -105,13 +107,17 @@ export const signUpUser = async (email, password, displayName) => {
         dailyReports: true,
         dataRefreshInterval: 5,
       },
-      password, // Store password for localStorage fallback
+      password,
     };
 
     users.push(newUser);
     saveStoredUsers(users);
-    saveCurrentUser({ ...newUser, password: undefined });
-    return { ...newUser, password: undefined };
+    
+    const safeUser = { ...newUser, password: undefined };
+    saveCurrentUser(safeUser);
+    notifyLocalAuthListeners(safeUser); // Trigger React update
+    
+    return safeUser;
   }
 };
 
@@ -155,6 +161,7 @@ export const signInUser = async (email, password) => {
 
     const safeUser = { ...user, password: undefined };
     saveCurrentUser(safeUser);
+    notifyLocalAuthListeners(safeUser); // Trigger React update
     return safeUser;
   }
 };
@@ -164,6 +171,7 @@ export const signOutUser = async () => {
     await signOut(auth);
   } else {
     saveCurrentUser(null);
+    notifyLocalAuthListeners(null); // Trigger React update
   }
 };
 
@@ -188,10 +196,15 @@ export const onAuthChange = (callback) => {
       }
     });
   } else {
-    // Fallback: simulate auth state change with stored user
+    // Fallback: simulate auth state change with stored user and register listener
     const user = getCurrentStoredUser();
     callback(user);
-    return () => {};
+    localAuthListeners.push(callback);
+    
+    // Return unsubscribe function
+    return () => {
+      localAuthListeners = localAuthListeners.filter(cb => cb !== callback);
+    };
   }
 };
 

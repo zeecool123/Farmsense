@@ -1,12 +1,14 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext'; // Add this import
 
 /**
  * Protected route component that requires authentication
  */
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, isGuest, loading } = useAuth();
+  const { t } = useLanguage(); // Extract translation function
 
   if (loading) {
     return (

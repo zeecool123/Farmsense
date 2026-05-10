@@ -13,8 +13,20 @@ export const AppProvider = ({ children }) => {
   const [sensorHistory, setSensorHistory] = useState({});
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [useSimulator, setUseSimulator] = useState(true); // Toggle for Firebase vs Simulator
+  const [useSimulator, setUseSimulator] = useState(true); 
   const MAX_HISTORY_LENGTH = 60;
+
+  // --- NEW: Global Notification Function for updates ---
+  useEffect(() => {
+    // Notify users about app updates when the app mounts
+    addAlert({
+      trayId: 'system',
+      severity: 'info',
+      title: '📢 System Notification',
+      message: 'Farmsense has been updated! Language translations and live timeline charts have been enhanced.',
+    });
+  }, []);
+  // ---------------------------------------------------
 
   // Initialize trays with simulator
   useEffect(() => {
@@ -255,4 +267,3 @@ export const useApp = () => {
   }
   return context;
 };
-
