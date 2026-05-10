@@ -1,4 +1,8 @@
+
 import React, { useState, useMemo, useEffect } from 'react';
+
+import React, { useState, useMemo } from 'react';
+
 import { useApp } from '../context/AppContext';
 import { useLanguage } from '../context/LanguageContext';
 import { TRAY_IDS } from '../utils/constants';
@@ -9,7 +13,10 @@ import {
   predictWaterConsumption,
   predictResourceEfficiency,
   predictAnomalies,
+
   getAIRecommendations,
+
+
 } from '../utils/mlPredictions';
 
 const MLInsights = () => {
@@ -17,11 +24,15 @@ const MLInsights = () => {
   const { t } = useLanguage();
   const [selectedTray, setSelectedTray] = useState('A');
   const [growthStage, setGrowthStage] = useState('vegetative');
+
   const [aiRecommendations, setAiRecommendations] = useState(null);
+
+
 
   const tray = trays[selectedTray];
   const currentSensorData = sensorData[selectedTray];
   const selectedTrayHistory = sensorHistory[selectedTray] || [];
+
 
   // Load AI recommendations
   useEffect(() => {
@@ -40,6 +51,7 @@ const MLInsights = () => {
     };
     loadRecommendations();
   }, [tray?.cropKey, currentSensorData]);
+
 
   const mockHistory = useMemo(() => {
     return Array.from({ length: 20 }, (_, i) => ({
@@ -134,6 +146,7 @@ const MLInsights = () => {
         </div>
       </div>
 
+
       {/* AI Recommendations */}
       {aiRecommendations && (
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
@@ -178,6 +191,8 @@ const MLInsights = () => {
           )}
         </div>
       )}
+
+
 
       {/* Tray Info */}
       {tray && (

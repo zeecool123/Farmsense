@@ -31,22 +31,66 @@ Analysis: The AI compares this to the "Optimal Strawberry Profile."
 
 Action: If the score is high, the system locks in the parameters. If the temp is too high, the AI sends a command to the AC and notifies the user via the app.
 
-# React + Vite
+## 🚀 Getting Started
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn
 
-Currently, two official plugins are available:
+### Installation
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+1. Clone the repository:
+```bash
+git clone https://github.com/your-username/farmsense.git
+cd farmsense
+```
 
-## React Compiler
+2. Install dependencies:
+```bash
+npm install
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+3. Set up Firebase (Optional - see Firebase Setup below)
 
-## Expanding the ESLint configuration
+4. Start the development server:
+```bash
+npm run dev
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+The app will be available at `http://localhost:5173`
+
+### Firebase Setup (Optional)
+
+The app works with localStorage authentication by default. To use Firebase Authentication:
+
+1. Create a Firebase project at [https://console.firebase.google.com/](https://console.firebase.google.com/)
+
+2. Enable Authentication:
+   - Go to Authentication > Sign-in method
+   - Enable Email/Password provider
+
+3. Get your Firebase config:
+   - Go to Project Settings > General > Your apps
+   - Click the web app icon (</>) to see your config
+
+4. Create a `.env` file in the root directory:
+```bash
+cp .env.example .env
+```
+
+5. Update `.env` with your Firebase config values:
+```
+VITE_FIREBASE_API_KEY=your-actual-api-key
+VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your-project-id
+VITE_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
+VITE_FIREBASE_APP_ID=your-app-id
+```
+
+6. Restart the development server
+
+**Note**: Without Firebase setup, the app will use localStorage for authentication, which works for development and testing.
 
 Getting Started
 
