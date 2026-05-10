@@ -94,72 +94,76 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-farm-500 to-farm-600 flex items-center justify-center px-4 py-8">
-      <div className="bg-white/95 dark:bg-slate-950/95 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-[0_30px_80px_-40px_rgba(22,163,74,0.9)] p-8 w-full max-w-md backdrop-blur-xl">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center px-4 py-8 relative overflow-hidden">
+      {/* Decorative gradient circles */}
+      <div className="absolute top-20 right-20 w-96 h-96 bg-emerald-200 dark:bg-emerald-900/20 rounded-full blur-3xl opacity-20"></div>
+      <div className="absolute bottom-20 left-20 w-96 h-96 bg-blue-200 dark:bg-blue-900/20 rounded-full blur-3xl opacity-20"></div>
+
+      <div className="glass-card p-10 w-full max-w-md backdrop-blur-2xl animate-fade-in relative z-10">
         <div className="flex justify-end mb-4">
           <LanguageSelector />
         </div>
         <div className="text-center mb-8">
-          <div className="text-5xl mb-3">🌿</div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Farmsense</h1>
-          <p className="text-slate-600 dark:text-slate-300 text-sm mt-2">{t('signupHeading')}</p>
+          <div className="text-6xl mb-3">🌿</div>
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Farmsense</h1>
+          <p className="text-gray-600 dark:text-gray-400 text-sm mt-2">{t('signupHeading')}</p>
         </div>
 
-        <form onSubmit={handleSignup} className="space-y-4">
+        <form onSubmit={handleSignup} className="space-y-5">
           {error && (
-            <div className="bg-red-100 dark:bg-red-900/20 border border-red-400 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded">
+            <div className="bg-red-100 dark:bg-red-900/20 border border-red-400 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-xl text-sm">
               {error}
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">{t('fullName')}</label>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{t('fullName')}</label>
             <input
               type="text"
               name="displayName"
               value={formData.displayName}
               onChange={handleChange}
-              className="w-full border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-farm-500 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+              className="w-full border border-gray-300/50 dark:border-gray-600/50 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 transition"
               placeholder="John Farmer"
               disabled={loading}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">{t('emailAddress')}</label>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{t('emailAddress')}</label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-farm-500 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+              className="w-full border border-gray-300/50 dark:border-gray-600/50 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 transition"
               placeholder={t('emailPlaceholder')}
               disabled={loading}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">{t('password')}</label>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{t('password')}</label>
             <input
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-farm-500 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+              className="w-full border border-gray-300/50 dark:border-gray-600/50 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 transition"
               placeholder={t('passwordPlaceholder')}
               disabled={loading}
             />
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{t('minPasswordChars')}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{t('minPasswordChars')}</p>
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">{t('confirmPassword')}</label>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{t('confirmPassword')}</label>
             <input
               type="password"
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="w-full border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-farm-500 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+              className="w-full border border-gray-300/50 dark:border-gray-600/50 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 transition"
               placeholder={t('confirmPasswordPlaceholder')}
               disabled={loading}
             />
@@ -168,37 +172,39 @@ const Signup = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-farm-600 hover:bg-farm-700 text-white font-semibold py-3 rounded-lg transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+            className="btn-primary w-full mt-6"
           >
             {loading ? t('creatingAccount') : t('signUp')}
           </button>
         </form>
+            />
+        </form>
 
         {/* Terms */}
-        <p className="text-center text-xs text-slate-500 dark:text-slate-400 mt-4">
+        <p className="text-center text-xs text-gray-500 dark:text-gray-400 mt-6">
           {t('bySigningUp')}
         </p>
 
         {/* Sign In Link */}
-        <div className="mt-6 border-t pt-6 text-center">
-          <p className="text-slate-600 dark:text-slate-400 text-sm">
+        <div className="mt-6 border-t border-gray-200 dark:border-gray-700 pt-6 text-center">
+          <p className="text-gray-600 dark:text-gray-400 text-sm">
             {t('alreadyHaveAccount')}{' '}
-            <Link to="/login" className="text-farm-600 dark:text-farm-400 font-semibold hover:underline">
+            <Link to="/login" className="text-emerald-600 dark:text-emerald-400 font-semibold hover:text-emerald-700 dark:hover:text-emerald-300 transition">
               {t('signInLink')}
             </Link>
           </p>
         </div>
 
         {/* Features */}
-        <div className="mt-8 space-y-2 text-sm text-slate-600 dark:text-slate-400">
-          <div className="flex items-center gap-2">
-            <span>✅</span> {t('freeAccount')}
+        <div className="mt-8 space-y-3 text-sm text-gray-600 dark:text-gray-400">
+          <div className="flex items-center gap-3">
+            <span className="text-emerald-600 dark:text-emerald-400">✓</span> {t('freeAccount')}
           </div>
-          <div className="flex items-center gap-2">
-            <span>✅</span> {t('instantSetup')}
+          <div className="flex items-center gap-3">
+            <span className="text-emerald-600 dark:text-emerald-400">✓</span> {t('instantSetup')}
           </div>
-          <div className="flex items-center gap-2">
-            <span>✅</span> {t('fullFeatures')}
+          <div className="flex items-center gap-3">
+            <span className="text-emerald-600 dark:text-emerald-400">✓</span> {t('fullFeatures')}
           </div>
         </div>
       </div>
