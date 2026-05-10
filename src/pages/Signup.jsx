@@ -177,8 +177,6 @@ const Signup = () => {
             {loading ? t('creatingAccount') : t('signUp')}
           </button>
         </form>
-            />
-        </form>
 
         {/* Terms */}
         <p className="text-center text-xs text-gray-500 dark:text-gray-400 mt-6">
