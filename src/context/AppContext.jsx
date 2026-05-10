@@ -13,14 +13,12 @@ export const AppProvider = ({ children }) => {
   const [sensorHistory, setSensorHistory] = useState({});
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [useSimulator, setUseSimulator] = useState(true); // Toggle for Firebase vs Simulator
+  const [useSimulator, setUseSimulator] = useState(true); 
   const MAX_HISTORY_LENGTH = 60;
 
-  // Initialize trays with simulator
   useEffect(() => {
     const initializeSensors = async () => {
       setLoading(true);
-      // Create simulators for demo trays
       const trayIds = ['A', 'B', 'C', 'D', 'E', 'F'];
       const cropKeys = Object.keys(CROP_PROFILES);
 
@@ -28,7 +26,6 @@ export const AppProvider = ({ children }) => {
         const cropKey = cropKeys[index % cropKeys.length];
         const crop = CROP_PROFILES[cropKey];
         
-        // Initialize tray
         setTrays((prev) => ({
           ...prev,
           [id]: {
@@ -40,12 +37,10 @@ export const AppProvider = ({ children }) => {
           },
         }));
 
-        // Create and start sensor simulator
         if (useSimulator) {
           const simulator = SensorSimulatorRegistry.create(id, cropKey, 5000);
           simulator.start();
 
-          // Subscribe to sensor updates
           simulator.subscribe((data) => {
             const timestamp = new Date();
             setSensorData((prev) => ({
@@ -53,7 +48,6 @@ export const AppProvider = ({ children }) => {
               [id]: { ...data, timestamp },
             }));
 
-            // Calculate AI score
             if (crop && data) {
               const score = calculateAIScore(data, crop);
               setAiScores((prev) => ({
@@ -62,8 +56,6 @@ export const AppProvider = ({ children }) => {
               }));
 
               addSensorHistory(id, { ...data, timestamp, aiScore: score });
-
-              // Check for anomalies and create alerts
               checkForAnomalies(id, crop, data, score);
             }
           });
@@ -80,11 +72,9 @@ export const AppProvider = ({ children }) => {
     };
   }, [useSimulator]);
 
-  // Check for anomalies and generate alerts
   const checkForAnomalies = useCallback((trayId, crop, sensorData, aiScore) => {
     const alerts_to_add = [];
 
-    // Temperature anomaly
     if (sensorData.temperature < crop.optimalTemp.min - 2 || sensorData.temperature > crop.optimalTemp.max + 2) {
       alerts_to_add.push({
         trayId,
@@ -94,7 +84,6 @@ export const AppProvider = ({ children }) => {
       });
     }
 
-    // Humidity anomaly
     if (sensorData.humidity < crop.optimalHumidity.min - 5 || sensorData.humidity > crop.optimalHumidity.max + 5) {
       alerts_to_add.push({
         trayId,
@@ -104,7 +93,6 @@ export const AppProvider = ({ children }) => {
       });
     }
 
-    // pH anomaly
     if (sensorData.ph < crop.optimalPH.min - 0.3 || sensorData.ph > crop.optimalPH.max + 0.3) {
       alerts_to_add.push({
         trayId,
@@ -114,7 +102,6 @@ export const AppProvider = ({ children }) => {
       });
     }
 
-    // Perfect match - replicate conditions
     if (aiScore >= 95) {
       alerts_to_add.push({
         trayId,
@@ -124,7 +111,6 @@ export const AppProvider = ({ children }) => {
       });
     }
 
-    // Add unique alerts
     alerts_to_add.forEach((alert) => {
       const exists = alerts.some(
         (a) => a.trayId === alert.trayId && a.title === alert.title
@@ -135,7 +121,6 @@ export const AppProvider = ({ children }) => {
     });
   }, [alerts]);
 
-  // Track sensor history for later predictions
   const addSensorHistory = useCallback((trayId, entry) => {
     setSensorHistory((prev) => {
       const history = prev[trayId] ? [...prev[trayId]] : [];
@@ -145,7 +130,6 @@ export const AppProvider = ({ children }) => {
     });
   }, []);
 
-  // Add or update a tray
   const updateTray = useCallback((trayId, trayData) => {
     setTrays((prev) => ({
       ...prev,
@@ -153,13 +137,13 @@ export const AppProvider = ({ children }) => {
     }));
   }, []);
 
-  // Add alert
+  // FIXED: Using a random string combined with Date.now() to ensure absolutely unique keys
   const addAlert = useCallback((alert) => {
-    const id = Date.now();
+    const id = Date.now().toString() + '_' + Math.random().toString(36).substring(2, 9);
     const newAlert = { ...alert, id };
-    setAlerts((prev) => [newAlert, ...prev].slice(0, 50)); // Keep last 50 alerts
     
-    // Auto-dismiss after 30 seconds if not critical
+    setAlerts((prev) => [newAlert, ...prev].slice(0, 50)); 
+    
     if (alert.severity !== 'critical') {
       setTimeout(() => {
         clearAlert(id);
@@ -169,12 +153,10 @@ export const AppProvider = ({ children }) => {
     return id;
   }, []);
 
-  // Clear alert
   const clearAlert = useCallback((alertId) => {
     setAlerts((prev) => prev.filter((a) => a.id !== alertId));
   }, []);
 
-  // Update sensor data for a tray
   const updateSensorData = useCallback((trayId, data) => {
     const timestamp = new Date();
     const entry = { ...data, timestamp, aiScore: aiScores[trayId] || 0 };
@@ -196,7 +178,6 @@ export const AppProvider = ({ children }) => {
     });
   }, [aiScores]);
 
-  // Trigger control action
   const triggerControl = useCallback((trayId, controlType, action) => {
     console.log(`Control: ${controlType} -> ${action} on Tray ${trayId}`);
     addAlert({
@@ -207,7 +188,6 @@ export const AppProvider = ({ children }) => {
     });
   }, [addAlert]);
 
-  // Simulate anomaly (for testing)
   const simulateAnomaly = useCallback((trayId, type = 'temperature') => {
     const simulator = SensorSimulatorRegistry.get(trayId);
     if (simulator) {
@@ -215,7 +195,6 @@ export const AppProvider = ({ children }) => {
     }
   }, []);
 
-  // Reset anomaly (for testing)
   const resetAnomaly = useCallback((trayId) => {
     const simulator = SensorSimulatorRegistry.get(trayId);
     if (simulator) {
@@ -255,4 +234,3 @@ export const useApp = () => {
   }
   return context;
 };
-

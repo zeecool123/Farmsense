@@ -74,8 +74,12 @@ const Signup = () => {
     setLoading(true);
 
     try {
+      // Create the account in localStorage
       await signUpUser(formData.email, formData.password, formData.displayName);
-      navigate('/');
+      
+      // MODIFIED: Send the user to the login page instead of the home page!
+      navigate('/login'); 
+      
     } catch (err) {
       if (err.code === 'auth/email-already-in-use') {
         setError(t('emailAlreadyInUse'));

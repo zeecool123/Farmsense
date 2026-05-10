@@ -18,7 +18,8 @@ const Analytics = () => {
     if (selectedTrayHistory.length > 1) {
       setChartData(
         selectedTrayHistory.map((entry) => ({
-          time: new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          // MODIFIED: Added 'second: 2-digit' so the x-axis actually moves!
+          time: new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
           temperature: entry.temperature,
           humidity: entry.humidity,
           ph: entry.ph,
@@ -68,6 +69,7 @@ const Analytics = () => {
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
+      {/* ... The rest of your JSX remains exactly the same ... */}
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-gray-800 mb-2">{t('analyticsAndTrends')}</h1>
         <p className="text-gray-600">{t('monitorSensorTrends')}</p>
