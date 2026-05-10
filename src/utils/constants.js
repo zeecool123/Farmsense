@@ -89,9 +89,8 @@ export const CROP_PROFILES = {
     optimalHumidity: { min: 75, max: 90 },
     optimalPH: { min: 6.0, max: 7.0 },
     optimalWaterUsage: { min: 40, max: 60 },
-
-// Crop profiles with optimal parameters
-export const CROP_PROFILES = {
+    optimalLight: { min: 12, max: 14 },
+  },
   strawberry: {
     name: 'Strawberry',
     icon: '🍓',
@@ -126,7 +125,6 @@ export const CROP_PROFILES = {
     optimalHumidity: { min: 50, max: 70 },
     optimalPH: { min: 6.0, max: 7.0 },
     optimalWaterUsage: { min: 80, max: 150 },
-
     optimalLight: { min: 12, max: 14 },
   },
 };
