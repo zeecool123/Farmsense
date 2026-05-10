@@ -3,23 +3,28 @@
 @tailwind utilities;
 
 :root {
-  --text: #374151;
-  --text-h: #111827;
-  --bg: #f8fafc;
+  --text: #111827;
+  --text-h: #0f172a;
+  --muted: #475569;
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --surface-soft: #f8fafc;
   --border: #d1d5db;
-  --code-bg: #e5e7eb;
-  --accent: #10b981;
-  --accent-bg: rgba(16, 185, 129, 0.14);
-  --accent-border: rgba(16, 185, 129, 0.35);
-  --social-bg: rgba(249, 250, 251, 0.9);
+  --code-bg: #e2e8f0;
+  --accent: #0f766e;
+  --accent-bg: rgba(15, 118, 110, 0.16);
+  --accent-border: rgba(15, 118, 110, 0.4);
+  --social-bg: rgba(249, 250, 251, 0.95);
+  --card-gradient: rgba(255, 255, 255, 0.95);
+  --dark-card-gradient: rgba(15, 23, 42, 0.88);
   --shadow:
-    rgba(15, 23, 42, 0.08) 0 2px 8px, rgba(15, 23, 42, 0.04) 0 1px 2px;
+    rgba(15, 23, 42, 0.1) 0 2px 8px, rgba(15, 23, 42, 0.05) 0 1px 2px;
 
-  --sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --heading: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --heading: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   --mono: ui-monospace, 'SF Mono', Monaco, 'Cascadia Code', monospace;
 
-  font: 18px/1.75 var(--sans);
+  font: 17px/1.8 var(--sans);
   letter-spacing: 0.15px;
   color-scheme: light dark;
   color: var(--text);
@@ -30,40 +35,95 @@
   -moz-osx-font-smoothing: grayscale;
 
   @media (max-width: 1024px) {
-    font-size: 15px;
+    font-size: 16px;
   }
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: #d1d5db;
+    --text: #e2e8f0;
     --text-h: #f8fafc;
+    --muted: #94a3b8;
     --bg: #0f172a;
+    --surface: #111827;
+    --surface-soft: #111827;
     --border: #334155;
     --code-bg: #111827;
     --accent: #10b981;
-    --accent-bg: rgba(16, 185, 129, 0.18);
-    --accent-border: rgba(16, 185, 129, 0.5);
-    --social-bg: rgba(15, 23, 42, 0.88);
+    --accent-bg: rgba(16, 185, 129, 0.22);
+    --accent-border: rgba(16, 185, 129, 0.45);
+    --social-bg: rgba(15, 23, 42, 0.92);
     --shadow:
-      rgba(0, 0, 0, 0.5) 0 2px 8px, rgba(0, 0, 0, 0.25) 0 1px 2px;
+      rgba(0, 0, 0, 0.4) 0 2px 8px, rgba(0, 0, 0, 0.2) 0 1px 2px;
   }
 }
 
 body {
   margin: 0;
   font-family: var(--sans);
-  font-size: 18px;
-  line-height: 1.75;
+  font-size: 17px;
+  line-height: 1.8;
   color: var(--text);
-  background: linear-gradient(135deg, #fafbfc 0%, #f0f4f8 100%);
+  background: var(--bg);
 }
 
 @media (prefers-color-scheme: dark) {
   body {
-    background: linear-gradient(135deg, #0f1117 0%, #1a1f2e 100%);
+    background: var(--bg);
     color: var(--text);
   }
+}
+
+html,
+body,
+p,
+span,
+button,
+input,
+textarea,
+select,
+a,
+li {
+  color: var(--text);
+  font-family: var(--sans);
+}
+
+.text-gray-600,
+.text-gray-500,
+.text-slate-500,
+.text-slate-600,
+.text-gray-400,
+.text-slate-400,
+.text-slate-700,
+.text-gray-700 {
+  color: var(--muted) !important;
+}
+
+.text-gray-900,
+.text-slate-900,
+.text-gray-800,
+.text-slate-800,
+.text-black {
+  color: var(--text) !important;
+}
+
+.bg-slate-50 {
+  background-color: var(--surface-soft) !important;
+}
+
+.bg-white {
+  background-color: var(--surface) !important;
+}
+
+.border-slate-200,
+.border-slate-100 {
+  border-color: var(--border) !important;
+}
+
+.bg-gradient-to-r.from-green-500.to-green-600.text-white,
+.bg-gradient-to-r.from-blue-600.to-indigo-600.text-white,
+.bg-gradient-to-r.from-cyan-600.to-blue-600.text-white {
+  color: white !important;
 }
 
 #root {

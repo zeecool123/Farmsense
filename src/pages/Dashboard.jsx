@@ -4,6 +4,7 @@ import { useApp } from '../context/AppContext';
 import { useLanguage } from '../context/LanguageContext';
 import TrayCard from '../components/TrayCard';
 import SensorReading from '../components/SensorReading';
+import HardwareSensorDashboard from '../components/HardwareSensorDashboard';
 import { TRAY_IDS } from '../utils/constants';
 
 const Dashboard = () => {
