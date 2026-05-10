@@ -137,7 +137,7 @@ const Dashboard = () => {
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{t('areaDetails', { areaId: selectedArea })}</h2>
             <button
-              onClick={() => setSelectedArea(null)}}
+              onClick={() => setSelectedArea(null)}
               className="text-slate-400 hover:text-slate-600 dark:hover:text-white text-2xl"
             >
               ✕
