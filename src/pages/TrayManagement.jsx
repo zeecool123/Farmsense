@@ -3,7 +3,7 @@ import { useApp } from '../context/AppContext';
 import { TRAY_IDS, CROP_PROFILES } from '../utils/constants';
 import { useLanguage } from '../context/LanguageContext';
 import TrayCard from '../components/TrayCard';
-import SensorReading from '../components/SensorReading';
+import HardwareSensorDashboard from '../components/HardwareSensorDashboard';
 
 const TrayManagement = () => {
   const { trays, updateTray, sensorData, aiScores, triggerControl } = useApp();
@@ -146,6 +146,8 @@ const TrayManagement = () => {
           </div>
         </div>
       </div>
+
+      <HardwareSensorDashboard />
 
       {/* Control Center */}
       <div className="mt-8 bg-white rounded-lg shadow-md p-6">
