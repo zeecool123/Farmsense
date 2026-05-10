@@ -51,43 +51,50 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-farm-400 via-farm-500 to-farm-600 flex items-center justify-center p-4">
-      <div className="bg-white/95 dark:bg-slate-950/95 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-[0_30px_80px_-40px_rgba(22,163,74,0.9)] p-8 w-full max-w-md backdrop-blur-xl">
-        <div className="flex justify-end mb-4">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Background decorative elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-emerald-200 to-emerald-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 dark:opacity-5"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-blue-200 to-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 dark:opacity-5"></div>
+      </div>
+
+      <div className="glass-card p-10 w-full max-w-md backdrop-blur-2xl animate-fade-in relative z-10">
+        <div className="flex justify-end mb-6">
           <LanguageSelector />
         </div>
-        <div className="text-center mb-6">
-          <div className="text-6xl mb-4">🌱</div>
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-2">Farmsense</h1>
-          <p className="text-slate-600 dark:text-slate-300 text-lg">{t('loginSubheading')}</p>
+
+        <div className="text-center mb-10">
+          <div className="text-7xl mb-4 inline-block bg-gradient-to-br from-emerald-400 to-emerald-600 p-4 rounded-2xl">🌱</div>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent mb-2">Farmsense</h1>
+          <p className="text-gray-600 dark:text-gray-400 text-lg">{t('loginSubheading')}</p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-6">
           {error && (
-            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg text-sm">
-              {error}
+            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-5 py-4 rounded-xl text-sm font-medium animate-slide-up">
+              ⚠️ {error}
             </div>
           )}
 
-          <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('emailAddress')}</label>
+          <div className="space-y-2">
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">{t('emailAddress')}</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full border border-slate-300 dark:border-slate-600 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-farm-500 focus:border-transparent transition-all bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+              className="w-full border border-gray-300/40 dark:border-gray-600/40 rounded-xl px-5 py-3.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-500"
               placeholder={t('emailPlaceholder')}
               disabled={loading}
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('password')}</label>
+          <div className="space-y-2">
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">{t('password')}</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full border border-slate-300 dark:border-slate-600 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-farm-500 focus:border-transparent transition-all bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+              className="w-full border border-gray-300/40 dark:border-gray-600/40 rounded-xl px-5 py-3.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-500"
               placeholder={t('passwordPlaceholder')}
               disabled={loading}
             />
@@ -96,33 +103,34 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-farm-500 to-farm-600 text-white font-semibold py-3 rounded-xl hover:from-farm-600 hover:to-farm-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+            className="w-full btn-primary py-3.5 text-base font-semibold disabled:opacity-60 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transition-all"
           >
             {loading ? t('signingIn') : t('signIn')}
           </button>
         </form>
 
-        <div className="mt-8 text-center">
-          <p className="text-slate-600 dark:text-slate-400 text-sm">
+        <div className="mt-8 text-center border-t border-gray-200 dark:border-gray-700 pt-6">
+          <p className="text-gray-600 dark:text-gray-400 text-sm">
             {t('noAccount')}{' '}
-            <Link to="/signup" className="text-farm-600 dark:text-farm-400 font-semibold hover:text-farm-700 dark:hover:text-farm-300 transition-colors">
+            <Link to="/signup" className="text-emerald-600 dark:text-emerald-400 font-semibold hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors">
               {t('createOne')}
             </Link>
           </p>
         </div>
 
-        <div className="mt-8 grid grid-cols-3 gap-4 text-center text-xs text-slate-500 dark:text-slate-400">
-          <div className="flex flex-col items-center">
-            <span className="text-2xl mb-1">📊</span>
-            {t('realTimeMonitoring')}
+        {/* Features highlight */}
+        <div className="mt-8 grid grid-cols-3 gap-4">
+          <div className="flex flex-col items-center p-3 rounded-xl bg-emerald-50 dark:bg-emerald-900/20">
+            <span className="text-2xl mb-2">📊</span>
+            <span className="text-xs font-medium text-gray-700 dark:text-gray-300 text-center">{t('realTimeMonitoring')}</span>
           </div>
-          <div className="flex flex-col items-center">
-            <span className="text-2xl mb-1">🤖</span>
-            {t('aiInsights')}
+          <div className="flex flex-col items-center p-3 rounded-xl bg-blue-50 dark:bg-blue-900/20">
+            <span className="text-2xl mb-2">🤖</span>
+            <span className="text-xs font-medium text-gray-700 dark:text-gray-300 text-center">{t('aiInsights')}</span>
           </div>
-          <div className="flex flex-col items-center">
-            <span className="text-2xl mb-1">⚡</span>
-            {t('smartControls')}
+          <div className="flex flex-col items-center p-3 rounded-xl bg-purple-50 dark:bg-purple-900/20">
+            <span className="text-2xl mb-2">⚡</span>
+            <span className="text-xs font-medium text-gray-700 dark:text-gray-300 text-center">{t('smartControls')}</span>
           </div>
         </div>
       </div>
