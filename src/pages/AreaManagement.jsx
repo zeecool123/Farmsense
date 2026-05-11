@@ -4,6 +4,7 @@ import { AREA_IDS, CROP_PROFILES } from '../utils/constants';
 import { useLanguage } from '../context/LanguageContext';
 import AreaCard from '../components/AreaCard';
 import SensorReading from '../components/SensorReading';
+import HardwareSensorDashboard from '../components/HardwareSensorDashboard';
 
 const AreaManagement = () => {
   const { areas, updateArea, sensorData, aiScores, triggerControl } = useApp();
