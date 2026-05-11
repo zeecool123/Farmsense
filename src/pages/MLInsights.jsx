@@ -122,11 +122,14 @@ const MLInsights = () => {
               onChange={(e) => setSelectedArea(e.target.value)}
               className="w-full border rounded px-4 py-2"
             >
-              {AREA_IDS.map((id) => (
-                <option key={id} value={id}>
-                  {t('area')} {id} {areas[id]?.crop?.icon}
-                </option>
-              ))}
+              {AREA_IDS.map((id) => {
+                const cropName = areas[id]?.crop?.name ? ` (${areas[id].crop.name})` : '';
+                return (
+                  <option key={id} value={id}>
+                    {t('area')} {id} {areas[id]?.crop?.icon}{cropName}
+                  </option>
+                );
+              })}
             </select>
           </div>
           <div>

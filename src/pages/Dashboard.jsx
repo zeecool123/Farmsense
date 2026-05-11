@@ -4,6 +4,7 @@ import { useApp } from '../context/AppContext';
 import { useLanguage } from '../context/LanguageContext';
 import AreaCard from '../components/AreaCard';
 import SensorReading from '../components/SensorReading';
+import AlertBox from '../components/AlertBox';
 import { AREA_IDS } from '../utils/constants';
 
 const Dashboard = () => {

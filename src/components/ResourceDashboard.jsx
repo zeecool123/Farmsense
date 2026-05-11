@@ -31,6 +31,14 @@ const ResourceDashboard = () => {
     return '❌ Needs Work';
   };
 
+  if (!resourceData || !trends || !efficiency) {
+    return (
+      <div className="p-6 text-center text-gray-500">
+        <p>Loading resource data...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="p-6 max-w-6xl mx-auto">
       <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">Resource Management</h1>

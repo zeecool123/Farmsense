@@ -26,19 +26,19 @@ export default function SmartOptimization() {
       <div className="flex gap-4 mb-8 border-b border-gray-300">
         <button
           onClick={() => setActiveTab('overview')}
-          className={activeTab === 'overview' ? 'border-b-2 border-blue-600' : ''}
+          className={activeTab === 'overview' ? 'border-b-2 border-blue-600 text-slate-900 dark:text-white' : 'text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'}
         >
           📊 Resource Overview
         </button>
         <button
           onClick={() => setActiveTab('automation')}
-          className={activeTab === 'automation' ? 'border-b-2 border-blue-600' : ''}
+          className={activeTab === 'automation' ? 'border-b-2 border-blue-600 text-slate-900 dark:text-white' : 'text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'}
         >
           ⚙️ Automation
         </button>
         <button
           onClick={() => setActiveTab('alerts')}
-          className={activeTab === 'alerts' ? 'border-b-2 border-blue-600' : ''}
+          className={activeTab === 'alerts' ? 'border-b-2 border-blue-600 text-slate-900 dark:text-white' : 'text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'}
         >
           🚨 Waste Detection
         </button>
