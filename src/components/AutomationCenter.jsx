@@ -1,42 +1,38 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAutomation } from '../context/AutomationContext';
-import { getAutomationProfile, getNextTaskTime, toggleTask as toggleTaskFunc } from '../services/automationEngine';
+import { getAutomationProfile, getNextTaskTime } from '../services/automationEngine';
 
 /**
  * Automation Center Component
  * Manages all automated tasks for farm areas
  */
 const AutomationCenter = () => {
-  const { areas, currentArea, setCurrentArea } = useApp();
-  const { tasks, addTask, toggleTask, getAreaTasks } = useAutomation();
+  const { areas, currentArea, aiScores } = useApp();
+  const { addTask, toggleTask, getAreaTasks } = useAutomation();
   const [selectedArea, setSelectedArea] = useState(currentArea || 'A');
   const [showAddTask, setShowAddTask] = useState(false);
-  const [nextRunTimes, setNextRunTimes] = useState({});
 
   // Initialize automation profile for selected area when it changes
   useEffect(() => {
     const area = areas[selectedArea];
     if (area && !getAreaTasks(selectedArea)?.length) {
       const profile = getAutomationProfile(area.cropKey);
-      profile.forEach((task, idx) => {
+      profile.forEach((task) => {
         const taskWithArea = { ...task, areaId: selectedArea };
         addTask(selectedArea, taskWithArea);
       });
     }
   }, [selectedArea, areas, addTask, getAreaTasks]);
 
-  // Update next run times
-  useEffect(() => {
+  const areaTasks = getAreaTasks(selectedArea);
+  const nextRunTimes = useMemo(() => {
     const times = {};
-    const areaTasks = getAreaTasks(selectedArea);
-    areaTasks.forEach(task => {
+    areaTasks.forEach((task) => {
       times[task.id] = getNextTaskTime(task);
     });
-    setNextRunTimes(times);
-  }, [selectedArea, getAreaTasks]);
-
-  const areaTasks = getAreaTasks(selectedArea);
+    return times;
+  }, [areaTasks]);
   const area = areas[selectedArea];
 
   const getTaskIcon = (taskType) => {
@@ -105,7 +101,9 @@ const AutomationCenter = () => {
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
               {area.crop?.name || 'Unassigned'} - Area {selectedArea}
             </h2>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">Health Score: {area.aiScore || '--'}%</p>
+            <p className="text-gray-600 dark:text-gray-400 mt-1">
+              Health Score: {typeof area.aiScore === 'number' ? `${area.aiScore}%` : aiScores[selectedArea] !== undefined ? `${aiScores[selectedArea]}%` : '--%'}
+            </p>
           </div>
 
           <div className="p-6 space-y-4">
