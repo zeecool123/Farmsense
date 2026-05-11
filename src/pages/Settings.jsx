@@ -7,13 +7,13 @@ const Settings = () => {
   return (
     <div className="p-6 max-w-4xl mx-auto">
       {/* Changed text-gray-800 to text-slate-900 dark:text-white for extreme clarity */}
-      <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-2">{t('settings')}</h1>
+      <h1 className="text-4xl font-bold text-black dark:text-white mb-2">{t('settings')}</h1>
       <p className="text-slate-600 dark:text-slate-400 mb-8">{t('configureSystem')}</p>
 
       <div className="space-y-6 max-w-2xl">
         {/* Account Settings */}
         <div className="bg-white dark:bg-slate-800 rounded-xl shadow-md p-6 border border-slate-200 dark:border-slate-700">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t('accountSettings')}</h2>
+          <h2 className="text-2xl font-bold text-black dark:text-white mb-4">{t('accountSettings')}</h2>
           <div className="space-y-5">
             <div>
               <label className="block text-sm font-semibold mb-2 text-slate-700 dark:text-slate-300">{t('emailLabel')}</label>
@@ -39,7 +39,7 @@ const Settings = () => {
 
         {/* Notifications */}
         <div className="bg-white dark:bg-slate-800 rounded-xl shadow-md p-6 border border-slate-200 dark:border-slate-700">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t('notificationsHeading')}</h2>
+          <h2 className="text-2xl font-bold text-black dark:text-white mb-4">{t('notificationsHeading')}</h2>
           <div className="space-y-4">
             <label className="flex items-center gap-3 p-3 border border-slate-100 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700/50 cursor-pointer transition">
               <input type="checkbox" defaultChecked className="w-5 h-5 text-farm-600 rounded focus:ring-farm-500 bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-600" />
@@ -58,7 +58,7 @@ const Settings = () => {
 
         {/* System Settings */}
         <div className="bg-white dark:bg-slate-800 rounded-xl shadow-md p-6 border border-slate-200 dark:border-slate-700">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t('systemSettings')}</h2>
+          <h2 className="text-2xl font-bold text-black dark:text-white mb-4">{t('systemSettings')}</h2>
           <div className="space-y-5">
             <div>
               <label className="block text-sm font-semibold mb-2 text-slate-700 dark:text-slate-300">{t('dataRefreshInterval')}</label>

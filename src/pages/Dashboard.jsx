@@ -31,7 +31,7 @@ const Dashboard = () => {
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-2">{t('dashboard')}</h1>
+        <h1 className="text-4xl font-bold text-black dark:text-white mb-2">{t('dashboard')}</h1>
         <p className="text-slate-600 dark:text-slate-400">{t('dashboardOverview')}</p>
       </div>
 
@@ -81,7 +81,7 @@ const Dashboard = () => {
         </div>
 
         <div className="bg-white dark:bg-slate-800 rounded-xl shadow p-6 border border-slate-100 dark:border-slate-700">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">{t('howToUseFarmsense')}</h2>
+          <h2 className="text-2xl font-bold text-black dark:text-white mb-3">{t('howToUseFarmsense')}</h2>
           <ol className="list-decimal list-inside space-y-3 text-slate-700 dark:text-slate-300">
             <li>{t('assignYourAreas')}</li>
             <li>{t('monitorLiveConditions')}</li>
@@ -114,7 +114,7 @@ const Dashboard = () => {
 
       {/* Areas Grid */}
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t('areaStatus')}</h2>
+        <h2 className="text-2xl font-bold text-black dark:text-white mb-4">{t('areaStatus')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {AREA_IDS.map((areaId) => {
             const area = areas[areaId];
@@ -136,7 +136,7 @@ const Dashboard = () => {
       {selectedAreaData && (
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6 space-y-6 border border-slate-200 dark:border-slate-700">
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t('areaDetails', { areaId: selectedArea })}</h2>
+            <h2 className="text-2xl font-bold text-black dark:text-white">{t('areaDetails', { areaId: selectedArea })}</h2>
             <button
               onClick={() => setSelectedArea(null)}
               className="text-slate-400 hover:text-slate-600 dark:hover:text-white text-2xl"
