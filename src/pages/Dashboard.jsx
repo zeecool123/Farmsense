@@ -144,23 +144,23 @@ const Dashboard = () => {
             </button>
           </div>
 
-          {/* Tray Info */}
+          {/* Area Info */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 border-b border-slate-200 dark:border-slate-700 pb-4">
             <div>
               <p className="text-slate-600 dark:text-slate-400 text-sm">{t('cropLabel')}</p>
               <p className="text-lg font-bold flex items-center gap-2 text-slate-900 dark:text-white">
-                {selectedTrayData.crop?.icon} {selectedTrayData.crop?.name}
+                {selectedAreaData.crop?.icon} {selectedAreaData.crop?.name}
               </p>
             </div>
             <div>
               <p className="text-slate-600 dark:text-slate-400 text-sm">{t('statusLabel')}</p>
               <p className="text-lg font-bold text-green-600">
-                🟢 {selectedTrayData.status}
+                🟢 {selectedAreaData.status}
               </p>
             </div>
             <div>
               <p className="text-slate-600 dark:text-slate-400 text-sm">{t('aiScoreLabel')}</p>
-              <p className="text-lg font-bold text-blue-600 dark:text-blue-400">{aiScores[selectedTray] || 0}/100</p>
+              <p className="text-lg font-bold text-blue-600 dark:text-blue-400">{aiScores[selectedArea] || 0}/100</p>
             </div>
           </div>
 
@@ -175,8 +175,8 @@ const Dashboard = () => {
                   unit="°C"
                   icon="🌡️"
                   status={
-                    selectedSensorData.temperature >= selectedTrayData.crop?.optimalTemp.min &&
-                    selectedSensorData.temperature <= selectedTrayData.crop?.optimalTemp.max
+                    selectedSensorData.temperature >= selectedAreaData.crop?.optimalTemp.min &&
+                    selectedSensorData.temperature <= selectedAreaData.crop?.optimalTemp.max
                       ? 'optimal'
                       : 'anomaly'
                   }
@@ -187,8 +187,8 @@ const Dashboard = () => {
                   unit="%"
                   icon="💧"
                   status={
-                    selectedSensorData.humidity >= selectedTrayData.crop?.optimalHumidity.min &&
-                    selectedSensorData.humidity <= selectedTrayData.crop?.optimalHumidity.max
+                    selectedSensorData.humidity >= selectedAreaData.crop?.optimalHumidity.min &&
+                    selectedSensorData.humidity <= selectedAreaData.crop?.optimalHumidity.max
                       ? 'optimal'
                       : 'anomaly'
                   }
@@ -199,8 +199,8 @@ const Dashboard = () => {
                   unit=""
                   icon="⚗️"
                   status={
-                    selectedSensorData.ph >= selectedTrayData.crop?.optimalPH.min &&
-                    selectedSensorData.ph <= selectedTrayData.crop?.optimalPH.max
+                    selectedSensorData.ph >= selectedAreaData.crop?.optimalPH.min &&
+                    selectedSensorData.ph <= selectedAreaData.crop?.optimalPH.max
                       ? 'optimal'
                       : 'anomaly'
                   }
@@ -223,19 +223,19 @@ const Dashboard = () => {
             <h3 className="text-lg font-bold mb-3 text-slate-900 dark:text-white">{t('testControls')}</h3>
             <div className="flex gap-2 flex-wrap">
               <button
-                onClick={() => simulateAnomaly(selectedTray, 'temperature')}
+                onClick={() => simulateAnomaly(selectedArea, 'temperature')}
                 className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 text-sm shadow"
               >
                 {t('simulateTempAnomaly')}
               </button>
               <button
-                onClick={() => simulateAnomaly(selectedTray, 'humidity')}
+                onClick={() => simulateAnomaly(selectedArea, 'humidity')}
                 className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 text-sm shadow"
               >
                 {t('simulateHumidityAnomaly')}
               </button>
               <button
-                onClick={() => resetAnomaly(selectedTray)}
+                onClick={() => resetAnomaly(selectedArea)}
                 className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 text-sm shadow"
               >
                 {t('resetToNormal') || 'Reset to Normal'}
