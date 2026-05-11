@@ -74,21 +74,21 @@ const AreaManagement = () => {
                 )}
 
                 {/* Live Sensor Preview */}
-                {trays[trayId]?.crop && sensorData[trayId] && (
+                {areas[areaId]?.crop && sensorData[areaId] && (
                   <div className="mt-2 bg-gradient-to-r from-blue-50 to-green-50 rounded-lg p-3 text-sm">
                     <p className="font-semibold mb-2">{t('liveSensorReadings')}</p>
                     <div className="grid grid-cols-2 gap-2">
                       <div>
-                        <span className="text-gray-600">{t('temperature')}:</span> <span className="font-bold">{sensorData[trayId].temperature?.toFixed(1)}°C</span>
+                        <span className="text-gray-600">{t('temperature')}:</span> <span className="font-bold">{sensorData[areaId].temperature?.toFixed(1)}°C</span>
                       </div>
                       <div>
-                        <span className="text-gray-600">{t('phLevel')}:</span> <span className="font-bold">{sensorData[trayId].ph?.toFixed(2)}</span>
+                        <span className="text-gray-600">{t('phLevel')}:</span> <span className="font-bold">{sensorData[areaId].ph?.toFixed(2)}</span>
                       </div>
                       <div>
-                        <span className="text-gray-600">{t('humidity')}:</span> <span className="font-bold">{sensorData[trayId].humidity?.toFixed(1)}%</span>
+                        <span className="text-gray-600">{t('humidity')}:</span> <span className="font-bold">{sensorData[areaId].humidity?.toFixed(1)}%</span>
                       </div>
                       <div>
-                        <span className="text-gray-600">{t('score')}:</span> <span className="font-bold text-blue-600">{aiScores[trayId]}/100</span>
+                        <span className="text-gray-600">{t('score')}:</span> <span className="font-bold text-blue-600">{aiScores[areaId]}/100</span>
                       </div>
                     </div>
                   </div>
@@ -151,13 +151,10 @@ const AreaManagement = () => {
       <div className="mt-8 bg-white rounded-lg shadow-md p-6">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t('systemControlsLabel')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {AREA_IDS.map((areaId) => (
+            areas[areaId]?.crop && (
+              <div key={areaId} className="border rounded-lg p-4">
                 <h3 className="font-bold mb-3">{t('tray')} {areaId}</h3>
-=======
-          {TRAY_IDS.map((trayId) => (
-            trays[trayId]?.crop && (
-              <div key={trayId} className="border rounded-lg p-4">
-                <h3 className="font-bold mb-3">{t('tray')} {trayId}</h3>
-
                 <div className="space-y-2">
                   <button
                     onClick={() => triggerControl(areaId, 'LED', 'on')}
