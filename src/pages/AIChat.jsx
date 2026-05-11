@@ -4,7 +4,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { chatWithFarmAI, generateFarmContext, getQuickAISuggestions } from '../services/aiChatService';
 
 const AIChat = () => {
-  const { trays, sensorData, aiScores } = useApp();
+  const { areas, sensorData, aiScores } = useApp();
   const { t } = useLanguage();
   const [conversationHistory, setConversationHistory] = useState([]);
   const [userInput, setUserInput] = useState('');
@@ -14,10 +14,10 @@ const AIChat = () => {
 
   // Generate farm context and suggestions on mount/data change
   useEffect(() => {
-    const farmContext = generateFarmContext(trays, sensorData, aiScores);
+    const farmContext = generateFarmContext(areas, sensorData, aiScores);
     const suggestions = getQuickAISuggestions(farmContext);
     setQuickSuggestions(suggestions);
-  }, [trays, sensorData, aiScores]);
+  }, [areas, sensorData, aiScores]);
 
   // Auto-scroll to bottom
   const scrollToBottom = () => {
@@ -40,7 +40,7 @@ const AIChat = () => {
     setIsLoading(true);
 
     try {
-      const farmContext = generateFarmContext(trays, sensorData, aiScores);
+      const farmContext = generateFarmContext(areas, sensorData, aiScores);
       const aiResponse = await chatWithFarmAI(messageToSend, farmContext, updatedHistory.slice(0, -1));
 
       // Add AI response to history

@@ -11,13 +11,13 @@ const USE_OPENAI = !!API_KEY;
 /**
  * Generate context about the farm for the LLM
  */
-export const generateFarmContext = (trays, sensorData, aiScores) => {
+export const generateFarmContext = (areas, sensorData, aiScores) => {
   const context = {
-    totalTrays: Object.keys(trays).length,
-    trays: Object.entries(trays).map(([id, tray]) => ({
+    totalAreas: Object.keys(areas).length,
+    areas: Object.entries(areas).map(([id, area]) => ({
       id,
-      crop: tray.crop?.name || 'Unassigned',
-      status: tray.status,
+      crop: area.crop?.name || 'Unassigned',
+      status: area.status,
       aiScore: aiScores[id] || 0,
       currentSensorData: sensorData[id] || {},
     })),
@@ -32,31 +32,31 @@ export const generateFarmContext = (trays, sensorData, aiScores) => {
  * Generate a system prompt with farm context
  */
 const buildSystemPrompt = (farmContext) => {
-  const trayDetails = farmContext.trays
-    .map((t) => `Tray ${t.id}: ${t.crop} (Status: ${t.status}, Health Score: ${t.aiScore}%, Last Reading: ${JSON.stringify(t.currentSensorData)})`)
+  const areaDetails = farmContext.areas
+    .map((t) => `Area ${t.id}: ${t.crop} (Status: ${t.status}, Health Score: ${t.aiScore}%, Last Reading: ${JSON.stringify(t.currentSensorData)})`)
     .join('\n');
 
   return `You are an expert agricultural AI assistant for an indoor vertical farm system called Farmsense. 
 Your role is to help farmers improve their crop yields and farm operations.
 
 Current Farm Status:
-- Total Active Trays: ${farmContext.totalTrays}
+- Total Active Areas: ${farmContext.totalAreas}
 - Average Farm Health: ${farmContext.averageHealth}%
 
-Tray Details:
-${trayDetails}
+Area Details:
+${areaDetails}
 
 You provide:
 1. Recommendations based on sensor data and crop requirements
-2. Troubleshooting for low sensor readings or tray issues
+2. Troubleshooting for low sensor readings or area issues
 3. Optimization suggestions for water usage, temperature, humidity, and pH
 4. Crop-specific guidance
 5. Explanations of AI recommendations
 6. Predictions about harvest timing and yield
 
-Always reference specific tray IDs and sensor readings when giving advice.
+Always reference specific area IDs and sensor readings when giving advice.
 Provide actionable, practical recommendations that farmers can implement.
-When uncertain, ask clarifying questions about specific trays or crops.`;
+When uncertain, ask clarifying questions about specific areas or crops.`;
 };
 
 /**
@@ -104,25 +104,25 @@ const generateFallbackResponse = (userMessage, farmContext) => {
   if (lowerMessage.includes('how') && lowerMessage.includes('farm')) {
     const avgHealth = farmContext.averageHealth;
     if (avgHealth >= 80) {
-      return `Your farm is performing excellently! Average health score is ${avgHealth}%. All ${farmContext.totalTrays} trays are operating optimally. Continue monitoring sensor readings and maintain current conditions.`;
+      return `Your farm is performing excellently! Average health score is ${avgHealth}%. All ${farmContext.totalAreas} areas are operating optimally. Continue monitoring sensor readings and maintain current conditions.`;
     } else if (avgHealth >= 60) {
-      return `Your farm health is good at ${avgHealth}%. Most trays are performing well. Consider reviewing trays with lower scores and checking their sensor configurations.`;
+      return `Your farm health is good at ${avgHealth}%. Most areas are performing well. Consider reviewing areas with lower scores and checking their sensor configurations.`;
     } else {
-      return `Your farm health needs attention (${avgHealth}%). Check sensor readings, calibration, and crop assignments. Some trays may need environmental adjustments.`;
+      return `Your farm health needs attention (${avgHealth}%). Check sensor readings, calibration, and crop assignments. Some areas may need environmental adjustments.`;
     }
   }
 
-  // Tray-specific questions
-  if (lowerMessage.includes('tray')) {
-    const trayMatches = userMessage.match(/tray\s*([a-f])/i);
-    if (trayMatches) {
-      const trayId = trayMatches[1].toUpperCase();
-      const tray = farmContext.trays.find((t) => t.id === trayId);
-      if (tray) {
-        return `Tray ${trayId} Status:\n- Crop: ${tray.crop}\n- Status: ${tray.status}\n- Health Score: ${tray.aiScore}%\n- Sensors: Temp ${tray.currentSensorData.temperature}°C, Humidity ${tray.currentSensorData.humidity}%, pH ${tray.currentSensorData.ph}`;
+  // Area-specific questions
+  if (lowerMessage.includes('area')) {
+    const areaMatches = userMessage.match(/area\s*([a-f])/i);
+    if (areaMatches) {
+      const areaId = areaMatches[1].toUpperCase();
+      const area = farmContext.areas.find((t) => t.id === areaId);
+      if (area) {
+        return `Area ${areaId} Status:\n- Crop: ${area.crop}\n- Status: ${area.status}\n- Health Score: ${area.aiScore}%\n- Sensors: Temp ${area.currentSensorData.temperature}°C, Humidity ${area.currentSensorData.humidity}%, pH ${area.currentSensorData.ph}`;
       }
     }
-    return `Please specify which tray (A-F) you'd like information about.`;
+    return `Please specify which area (A-F) you'd like information about.`;
   }
 
   // Temperature questions
@@ -147,11 +147,11 @@ const generateFallbackResponse = (userMessage, farmContext) => {
 
   // Recommendations
   if (lowerMessage.includes('recommend') || lowerMessage.includes('suggest')) {
-    return `I recommend:\n1. Check the ML Insights page for crop-specific predictions\n2. Review each tray's sensor readings on the Dashboard\n3. Compare current conditions to optimal ranges\n4. Use Analytics to track trends over time\n5. Adjust one parameter at a time to isolate improvements`;
+    return `I recommend:\n1. Check the ML Insights page for crop-specific predictions\n2. Review each area's sensor readings on the Dashboard\n3. Compare current conditions to optimal ranges\n4. Use Analytics to track trends over time\n5. Adjust one parameter at a time to isolate improvements`;
   }
 
   // Default response
-  return `I can help with questions about your farm's sensor data, crop recommendations, and optimization. Ask me about:\n- Specific trays (e.g., "How is Tray A?")\n- Sensor readings (temperature, humidity, pH)\n- Crop-specific guidance\n- Harvest predictions\n- Farm optimization tips\n\nWhat would you like to know?`;
+  return `I can help with questions about your farm's sensor data, crop recommendations, and optimization. Ask me about:\n- Specific areas (e.g., "How is Area A?")\n- Sensor readings (temperature, humidity, pH)\n- Crop-specific guidance\n- Harvest predictions\n- Farm optimization tips\n\nWhat would you like to know?`;
 };
 
 /**
@@ -189,12 +189,12 @@ export const chatWithFarmAI = async (userMessage, farmContext, conversationHisto
 export const getQuickAISuggestions = (farmContext) => {
   const suggestions = [];
 
-  // Check low-health trays
-  const lowHealthTrays = farmContext.trays.filter((t) => t.aiScore < 60);
-  if (lowHealthTrays.length > 0) {
-    suggestions.push({
-      severity: 'warning',
-      message: `${lowHealthTrays.length} tray(s) have health scores below 60%. Click to ask for optimization tips.`,
+  // Check low-health areas
+  const lowHealthAreas = farmContext.areas.filter((t) => t.aiScore < 60);
+    if (lowHealthAreas.length > 0) {
+      suggestions.push({
+        severity: 'warning',
+        message: `${lowHealthAreas.length} area(s) have health scores below 60%. Click to ask for optimization tips.`,
     });
   }
 
