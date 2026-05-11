@@ -14,6 +14,7 @@ import AIChat from './pages/AIChat';
 import HardwareSensor from './pages/HardwareSensor';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import SmartOptimization from './pages/SmartOptimization';
 
 function App() {
   return (
@@ -23,7 +24,17 @@ function App() {
           <AuthProvider>
             <AppProvider>
               <Routes>
-                {/* Public Routes */}
+                <Route
+                path="/smart-optimization"
+                element={
+                  <ProtectedRoute>
+                    <Layout>
+                      <SmartOptimization />
+                    </Layout>
+                  </ProtectedRoute>
+                }
+              />
+              {/* Public Routes */}
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
 
