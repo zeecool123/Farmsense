@@ -35,7 +35,7 @@ const MLInsights = () => {
   // Load AI recommendations
   useEffect(() => {
     const loadRecommendations = async () => {
-      if (tray?.cropKey && currentSensorData) {
+      if (area?.cropKey && currentSensorData) {
         try {
           const recs = await getAIRecommendations(area.cropKey, currentSensorData);
           setAiRecommendations(recs);
@@ -108,7 +108,7 @@ const MLInsights = () => {
         <h1 className="text-4xl font-bold text-gray-800 mb-2">🤖 {t('mlInsights')}</h1>
         <p className="text-gray-600">{t('aiPoweredPredictions')}</p>
         <p className="text-sm text-gray-500 mt-1">
-          {selectedTrayHistory.length > 0 ? t('usingRealTrayHistory') : t('usingFallbackSensorData')}
+          {selectedAreaHistory.length > 0 ? t('usingRealTrayHistory') : t('usingFallbackSensorData')}
         </p>
       </div>
 
@@ -192,13 +192,13 @@ const MLInsights = () => {
 
 
 
-      {/* Tray Info */}
-      {tray && (
+      {/* Area Info */}
+      {area && (
         <div className="bg-gradient-to-r from-purple-500 to-blue-600 text-white rounded-lg shadow-md p-6 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
               <p className="text-purple-100 text-sm">{t('cropLabel')}</p>
-              <p className="text-2xl font-bold">{tray.crop?.name} {tray.crop?.icon}</p>
+              <p className="text-2xl font-bold">{area.crop?.name} {area.crop?.icon}</p>
             </div>
             <div>
               <p className="text-purple-100 text-sm">{t('growStageLabel')}</p>
