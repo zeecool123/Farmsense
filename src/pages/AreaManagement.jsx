@@ -27,7 +27,7 @@ const AreaManagement = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Area Cards */}
         <div className="lg:col-span-2">
-          <h2 className="text-2xl font-bold mb-4">{t('yourAreas')}</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('yourAreas')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             {AREA_IDS.map((areaId) => (
               <div key={areaId}>
@@ -101,7 +101,7 @@ const AreaManagement = () => {
 
         {/* Crop Profiles Sidebar */}
         <div>
-          <h2 className="text-2xl font-bold mb-4">{t('cropProfiles')}</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('cropProfiles')}</h2>
           <div className="space-y-4">
             {Object.entries(CROP_PROFILES).map(([key, crop]) => (
               <div key={key} className="bg-white rounded-lg shadow-md p-4 border-l-4 border-green-500 hover:shadow-lg transition">
@@ -152,7 +152,7 @@ const AreaManagement = () => {
 
       {/* Control Center */}
       <div className="mt-8 bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-2xl font-bold mb-4">{t('systemControlsLabel')}</h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('systemControlsLabel')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {AREA_IDS.map((areaId) => (
             areas[areaId]?.crop && (

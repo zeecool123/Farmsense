@@ -62,7 +62,7 @@ const Dashboard = () => {
       {/* Quick Actions */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
         <div className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-xl shadow p-6">
-          <h2 className="text-2xl font-bold mb-3">{t('quickActions')}</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">{t('quickActions')}</h2>
           <p className="text-cyan-100 mb-4">{t('jumpIntoWorkflows')}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Link to="/areas" className="rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white px-4 py-3 font-semibold text-sm shadow transition backdrop-blur-sm">
@@ -81,7 +81,7 @@ const Dashboard = () => {
         </div>
 
         <div className="bg-white dark:bg-slate-800 rounded-xl shadow p-6 border border-slate-100 dark:border-slate-700">
-          <h2 className="text-2xl font-bold mb-3 text-slate-900 dark:text-white">{t('howToUseFarmsense')}</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">{t('howToUseFarmsense')}</h2>
           <ol className="list-decimal list-inside space-y-3 text-slate-700 dark:text-slate-300">
             <li>{t('assignYourAreas')}</li>
             <li>{t('monitorLiveConditions')}</li>
@@ -93,11 +93,12 @@ const Dashboard = () => {
       </div>
 
       {/* ML Insights Quick Link */}
+      {/* ML Insights Quick Link */}
       <div className="mb-8">
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg shadow-md p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <p className="text-sm uppercase tracking-widest text-blue-200">{t('aiDrivenInsights')}</p>
-            <h2 className="text-3xl font-bold mt-2">{t('exploreMLInsights')}</h2>
+            <h2 className="text-3xl font-bold text-white mt-2">{t('exploreMLInsights')}</h2>
             <p className="mt-2 text-blue-100 max-w-xl">
               {t('goToMLInsights')} {t('viewAnalytics')}
             </p>
@@ -113,7 +114,7 @@ const Dashboard = () => {
 
       {/* Areas Grid */}
       <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white">{t('areaStatus')}</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t('areaStatus')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {AREA_IDS.map((areaId) => {
             const area = areas[areaId];
@@ -135,7 +136,7 @@ const Dashboard = () => {
       {selectedAreaData && (
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6 space-y-6 border border-slate-200 dark:border-slate-700">
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{t('areaDetails', { areaId: selectedArea })}</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t('areaDetails', { areaId: selectedArea })}</h2>
             <button
               onClick={() => setSelectedArea(null)}
               className="text-slate-400 hover:text-slate-600 dark:hover:text-white text-2xl"
