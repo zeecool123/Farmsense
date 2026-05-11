@@ -13,7 +13,7 @@ import MLInsights from './pages/MLInsights';
 import AIChat from './pages/AIChat';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import SmartOptimization from './pages/SmartOptimization';
+import HardwareSensors from './pages/HardwareSensors';
 
 function App() {
   return (
@@ -94,6 +94,16 @@ function App() {
                   <ProtectedRoute>
                     <Layout>
                       <AIChat />
+                    </Layout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/hardware-sensors"
+                element={
+                  <ProtectedRoute>
+                    <Layout>
+                      <HardwareSensors />
                     </Layout>
                   </ProtectedRoute>
                 }

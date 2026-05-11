@@ -13,7 +13,7 @@ const Sidebar = () => {
     { path: '/analytics', label: t('analyticsAndTrends'), icon: '📈' },
     { path: '/ml-insights', label: t('mlInsights'), icon: '🤖' },
     { path: '/ai-chat', label: t('aiChat', 'AI Assistant'), icon: '💬' },
-    { path: '/smart-optimization', label: 'Smart Optimization', icon: '🌱' },
+    { path: '/hardware-sensors', label: t('hardwareSensors'), icon: '🔧' },
     { path: '/settings', label: t('settings'), icon: '⚙️' },
   ];
 

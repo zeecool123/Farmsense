@@ -4,7 +4,6 @@ import { AREA_IDS, CROP_PROFILES } from '../utils/constants';
 import { useLanguage } from '../context/LanguageContext';
 import AreaCard from '../components/AreaCard';
 import SensorReading from '../components/SensorReading';
-import HardwareSensorDashboard from '../components/HardwareSensorDashboard';
 
 const AreaManagement = () => {
   const { areas, updateArea, sensorData, aiScores, triggerControl } = useApp();
@@ -27,7 +26,7 @@ const AreaManagement = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Area Cards */}
         <div className="lg:col-span-2">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('yourAreas')}</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t('yourAreas')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             {AREA_IDS.map((areaId) => (
               <div key={areaId}>
@@ -40,7 +39,7 @@ const AreaManagement = () => {
                 />
                 {editingArea === areaId && (
                   <div className="mt-2 bg-white rounded-lg shadow-md p-4 border border-green-200">
-                    <h3 className="font-bold mb-3">{t('assignCropsDescription')} {areaId}</h3>
+                    <h3 className="font-bold mb-3">{t('assignCropToArea', { areaId })}</h3>
                     <select
                       value={selectedCrop}
                       onChange={(e) => setSelectedCrop(e.target.value)}
@@ -101,7 +100,7 @@ const AreaManagement = () => {
 
         {/* Crop Profiles Sidebar */}
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('cropProfiles')}</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t('cropProfiles')}</h2>
           <div className="space-y-4">
             {Object.entries(CROP_PROFILES).map(([key, crop]) => (
               <div key={key} className="bg-white rounded-lg shadow-md p-4 border-l-4 border-green-500 hover:shadow-lg transition">
@@ -148,11 +147,9 @@ const AreaManagement = () => {
         </div>
       </div>
 
-      <HardwareSensorDashboard />
-
       {/* Control Center */}
       <div className="mt-8 bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('systemControlsLabel')}</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t('systemControlsLabel')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {AREA_IDS.map((areaId) => (
             areas[areaId]?.crop && (

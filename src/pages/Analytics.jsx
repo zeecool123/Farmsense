@@ -71,7 +71,7 @@ const Analytics = () => {
     <div className="p-6 max-w-7xl mx-auto">
       {/* ... The rest of your JSX remains exactly the same ... */}
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-800 mb-2">{t('analyticsAndTrends')}</h1>
+        <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-2">{t('analyticsAndTrends')}</h1>
         <p className="text-gray-600">{t('monitorSensorTrends')}</p>
       </div>
 
@@ -139,7 +139,7 @@ const Analytics = () => {
 
       {/* Current Readings */}
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('currentReadingsHeading')}</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t('currentReadingsHeading')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <SensorReading
             label={t('temperature')}
@@ -194,7 +194,7 @@ const Analytics = () => {
       {(yieldPrediction || harvestPrediction) && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('yieldForecastHeading')}</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t('yieldForecastHeading')}</h2>
             <p className="text-sm text-gray-600 mb-4">
               {selectedAreaHistory.length > 0 ? t('usingRealSensorHistory') : t('usingFallbackTrendData')}
             </p>
@@ -214,7 +214,7 @@ const Analytics = () => {
           </div>
 
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('harvestProjectionHeading')}</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t('harvestProjectionHeading')}</h2>
             <div className="space-y-3">
               <div className="text-5xl font-bold text-amber-600">{harvestPrediction?.maturityPercent || '--'}%</div>
               <div className="grid grid-cols-2 gap-4">
@@ -264,7 +264,7 @@ const Analytics = () => {
       {/* Optimal Parameters */}
       {area?.crop && (
         <div className="mt-8 bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('optimalParametersFor', { cropName: area.crop.name })}</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t('optimalParametersFor', { cropName: area.crop.name })}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             <div className="border-l-4 border-orange-500 pl-4">
               <p className="text-gray-600 text-sm">{t('temperature')}</p>
