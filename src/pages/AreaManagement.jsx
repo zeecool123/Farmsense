@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { AREA_IDS, CROP_PROFILES } from '../utils/constants';
 import { useLanguage } from '../context/LanguageContext';
-import AreaCard from '../components/TrayCard';
+import AreaCard from '../components/AreaCard';
 import SensorReading from '../components/SensorReading';
 
 const AreaManagement = () => {
