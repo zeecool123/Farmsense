@@ -793,7 +793,7 @@ export const LanguageProvider = ({ children }) => {
   const t = (key, vars) => {
     const translation = translations[language]?.[key] || translations.en[key] || key;
     if (!vars) return translation;
-    return Object.keys(vars).reduce((text, varKey) => text.replace(new RegExp(`\{${varKey}\}`, 'g'), vars[varKey]), translation);
+    return Object.keys(vars).reduce((text, varKey) => text.replaceAll(`{${varKey}}`, vars[varKey]), translation);
   };
 
   return (
