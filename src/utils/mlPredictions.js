@@ -5,10 +5,159 @@
 
 import { CROP_PROFILES } from '../utils/constants';
 
+import { getAdjustedRecommendations } from '../utils/cropData';
+
+/**
+ * Get AI recommendations for optimal crop conditions
+ * Uses CSV data and adjusts based on current pH
+ */
+export const getAIRecommendations = async (cropKey, currentConditions) => {
+  const crop = CROP_PROFILES[cropKey];
+  if (!crop) return null;
+
+  // Get adjusted recommendations from CSV data
+  const adjustedRecs = await getAdjustedRecommendations(cropKey, currentConditions);
+
+  if (!adjustedRecs) {
+    // Fallback to basic recommendations
+    return getBasicRecommendations(crop, currentConditions);
+  }
+
+  // Generate actionable recommendations
+  const recommendations = [];
+
+  // Temperature recommendation
+  if (adjustedRecs.temperature.status !== 'optimal') {
+    const action = adjustedRecs.temperature.status === 'low' ? 'Increase' : 'Decrease';
+    recommendations.push({
+      parameter: 'Temperature',
+      action: `${action} temperature to ${adjustedRecs.temperature.target.toFixed(1)}°C`,
+      priority: adjustedRecs.temperature.status === 'low' && currentConditions.temperature < 15 ? 'high' : 'medium',
+      reason: `Optimal range: ${adjustedRecs.temperature.range.min.toFixed(1)}-${adjustedRecs.temperature.range.max.toFixed(1)}°C`,
+    });
+  }
+
+  // Humidity recommendation
+  if (adjustedRecs.humidity.status !== 'optimal') {
+    const action = adjustedRecs.humidity.status === 'low' ? 'Increase' : 'Decrease';
+    recommendations.push({
+      parameter: 'Humidity',
+      action: `${action} humidity to ${adjustedRecs.humidity.target.toFixed(1)}%`,
+      priority: adjustedRecs.humidity.status === 'low' && currentConditions.humidity < 40 ? 'high' : 'medium',
+      reason: `Optimal range: ${adjustedRecs.humidity.range.min.toFixed(1)}-${adjustedRecs.humidity.range.max.toFixed(1)}%`,
+    });
+  }
+
+  // Water content recommendation
+  if (adjustedRecs.waterContent.status !== 'optimal') {
+    const action = adjustedRecs.waterContent.status === 'low' ? 'Increase' : 'Decrease';
+    recommendations.push({
+      parameter: 'Water Content',
+      action: `${action} irrigation to ${adjustedRecs.waterContent.target.toFixed(0)} ml/day`,
+      priority: adjustedRecs.waterContent.status === 'low' ? 'high' : 'medium',
+      reason: `Optimal range: ${adjustedRecs.waterContent.range.min.toFixed(0)}-${adjustedRecs.waterContent.range.max.toFixed(0)} ml/day`,
+    });
+  }
+
+  // pH recommendation
+  if (adjustedRecs.ph.status !== 'optimal') {
+    const action = adjustedRecs.ph.status === 'low' ? 'Increase' : 'Decrease';
+    recommendations.push({
+      parameter: 'Soil pH',
+      action: `${action} soil pH to ${adjustedRecs.ph.target.toFixed(1)}`,
+      priority: 'high', // pH is critical
+      reason: `Optimal range: ${adjustedRecs.ph.range.min.toFixed(1)}-${adjustedRecs.ph.range.max.toFixed(1)}. pH affects nutrient availability.`,
+    });
+  }
+
+  // Sort by priority
+  recommendations.sort((a, b) => {
+    const priorityOrder = { high: 3, medium: 2, low: 1 };
+    return priorityOrder[b.priority] - priorityOrder[a.priority];
+  });
+
+  return {
+    recommendations,
+    overallStatus: recommendations.length === 0 ? 'optimal' : 
+                   recommendations.filter(r => r.priority === 'high').length > 0 ? 'needs_attention' : 'good',
+    summary: recommendations.length === 0 
+      ? 'All parameters are optimal for crop growth.'
+      : `${recommendations.length} parameter(s) need adjustment for best growth.`,
+  };
+};
+
+/**
+ * Fallback basic recommendations
+ */
+const getBasicRecommendations = (crop, currentConditions) => {
+  const recommendations = [];
+
+  // Temperature
+  if (currentConditions.temperature < crop.optimalTemp.min) {
+    recommendations.push({
+      parameter: 'Temperature',
+      action: `Increase temperature to ${crop.optimalTemp.min}°C`,
+      priority: 'medium',
+      reason: `Current: ${currentConditions.temperature}°C`,
+    });
+  } else if (currentConditions.temperature > crop.optimalTemp.max) {
+    recommendations.push({
+      parameter: 'Temperature',
+      action: `Decrease temperature to ${crop.optimalTemp.max}°C`,
+      priority: 'medium',
+      reason: `Current: ${currentConditions.temperature}°C`,
+    });
+  }
+
+  // Humidity
+  if (currentConditions.humidity < crop.optimalHumidity.min) {
+    recommendations.push({
+      parameter: 'Humidity',
+      action: `Increase humidity to ${crop.optimalHumidity.min}%`,
+      priority: 'medium',
+      reason: `Current: ${currentConditions.humidity}%`,
+    });
+  } else if (currentConditions.humidity > crop.optimalHumidity.max) {
+    recommendations.push({
+      parameter: 'Humidity',
+      action: `Decrease humidity to ${crop.optimalHumidity.max}%`,
+      priority: 'medium',
+      reason: `Current: ${currentConditions.humidity}%`,
+    });
+  }
+
+  // pH
+  if (currentConditions.ph < crop.optimalPH.min) {
+    recommendations.push({
+      parameter: 'Soil pH',
+      action: `Increase soil pH to ${crop.optimalPH.min}`,
+      priority: 'high',
+      reason: `Current: ${currentConditions.ph}`,
+    });
+  } else if (currentConditions.ph > crop.optimalPH.max) {
+    recommendations.push({
+      parameter: 'Soil pH',
+      action: `Decrease soil pH to ${crop.optimalPH.max}`,
+      priority: 'high',
+      reason: `Current: ${currentConditions.ph}`,
+    });
+  }
+
+  return {
+    recommendations,
+    overallStatus: recommendations.length === 0 ? 'optimal' : 'needs_attention',
+    summary: recommendations.length === 0 
+      ? 'All parameters are optimal for crop growth.'
+      : `${recommendations.length} parameter(s) need adjustment.`,
+  };
+};
+
+
 /**
  * Predict crop yield based on historical data
  * Uses trend analysis and AI score history
  */
+
 export const predictCropYield = (sensorHistory, cropKey, daysToHarvest = 30) => {
   if (!sensorHistory || sensorHistory.length === 0) {
     return {
@@ -90,11 +239,22 @@ export const predictHarvestTime = (cropKey, sensorHistory, plantedDaysAgo) => {
 
   // Estimated growth duration (varies by crop)
   const growthDuration = {
+    blackgram: 75,
+    chickpea: 90,
+    grapes: 150,
+    kidneybeans: 85,
+    lentil: 80,
+    mothbeans: 70,
+    mungbean: 65,
+    muskmelon: 80,
+    pigeonpeas: 120,
+    watermelon: 85,
     strawberry: 45,
     lettuce: 35,
     tomato: 70,
     basil: 30,
-  }[cropKey] || 45;
+  }[cropKey] || 75;
+
 
   // Calculate maturity percentage based on time
   const maturityPercent = Math.min(100, (plantedDaysAgo / growthDuration) * 100);
@@ -141,11 +301,22 @@ export const estimateNutrientRequirements = (cropKey, sensorHistory, growthStage
 
   // Base nutrient requirements vary by crop
   const nutrients = {
+    blackgram: { nitrogen: 20, phosphorus: 40, potassium: 20 },
+    chickpea: { nitrogen: 20, phosphorus: 40, potassium: 60 },
+    grapes: { nitrogen: 60, phosphorus: 20, potassium: 100 },
+    kidneybeans: { nitrogen: 20, phosphorus: 40, potassium: 20 },
+    lentil: { nitrogen: 20, phosphorus: 40, potassium: 20 },
+    mothbeans: { nitrogen: 20, phosphorus: 40, potassium: 20 },
+    mungbean: { nitrogen: 20, phosphorus: 40, potassium: 20 },
+    muskmelon: { nitrogen: 80, phosphorus: 40, potassium: 120 },
+    pigeonpeas: { nitrogen: 20, phosphorus: 40, potassium: 60 },
+    watermelon: { nitrogen: 80, phosphorus: 40, potassium: 120 },
     strawberry: { nitrogen: 150, phosphorus: 80, potassium: 200 },
     lettuce: { nitrogen: 120, phosphorus: 60, potassium: 150 },
     tomato: { nitrogen: 200, phosphorus: 100, potassium: 250 },
     basil: { nitrogen: 100, phosphorus: 50, potassium: 100 },
-  }[cropKey] || { nitrogen: 150, phosphorus: 75, potassium: 150 };
+  }[cropKey] || { nitrogen: 40, phosphorus: 40, potassium: 60 };
+
 
   // Adjust for growth stage
   if (growthStage === 'flowering') {

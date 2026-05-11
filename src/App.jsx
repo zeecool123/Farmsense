@@ -6,23 +6,34 @@ import { LanguageProvider } from './context/LanguageContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
-import TrayManagement from './pages/TrayManagement';
+import AreaManagement from './pages/AreaManagement';
 import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
 import MLInsights from './pages/MLInsights';
 import AIChat from './pages/AIChat';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import SmartOptimization from './pages/SmartOptimization';
 
 function App() {
   return (
-    <Router>
+    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <ThemeProvider>
         <LanguageProvider>
           <AuthProvider>
             <AppProvider>
               <Routes>
-                {/* Public Routes */}
+                <Route
+                path="/smart-optimization"
+                element={
+                  <ProtectedRoute>
+                    <Layout>
+                      <SmartOptimization />
+                    </Layout>
+                  </ProtectedRoute>
+                }
+              />
+              {/* Public Routes */}
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
 
@@ -38,11 +49,11 @@ function App() {
                 }
               />
               <Route
-                path="/trays"
+                path="/areas"
                 element={
                   <ProtectedRoute>
                     <Layout>
-                      <TrayManagement />
+                      <AreaManagement />
                     </Layout>
                   </ProtectedRoute>
                 }
