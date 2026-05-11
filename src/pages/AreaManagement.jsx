@@ -21,7 +21,7 @@ const AreaManagement = () => {
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
-      <h1 className="text-4xl font-bold text-gray-800 mb-2">{t('areaManagement')}</h1>
+      <h1 className="text-4xl font-bold text-black mb-2">{t('areaManagement')}</h1>
       <p className="text-gray-600 mb-8">{t('assignCropsDescription')}</p>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
