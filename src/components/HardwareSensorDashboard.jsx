@@ -46,8 +46,8 @@ const HardwareSensorDashboard = () => {
   const [hoverState, setHoverState] = useState({ areaId: AREA_IDS[0], sensorKey: 'arduino' });
   const [graphSelection, setGraphSelection] = useState({ areaId: AREA_IDS[0], sensorKey: 'temperature' });
 
-  const activeAreaId = hoverState.areaId;
-  const activeSensorKey = hoverState.sensorKey;
+  const activeAreaId = graphSelection.areaId;
+  const activeSensorKey = graphSelection.sensorKey;
   const activeArea = areas[activeAreaId];
   const activeData = sensorData[activeAreaId] || {};
   const activeSensor = SENSOR_TYPES.find((sensor) => sensor.key === activeSensorKey);
@@ -59,24 +59,24 @@ const HardwareSensorDashboard = () => {
       return (
         <div className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
-            <div className="rounded-2xl bg-slate-100 p-4">
-              <p className="text-xs text-slate-500">{t('temperature')}</p>
+            <div className="rounded-2xl bg-slate-100 dark:bg-slate-700 p-4">
+              <p className="text-xs text-slate-500 dark:text-slate-400">{t('temperature')}</p>
               <p className="text-xl font-semibold">{activeData.temperature?.toFixed(1) ?? '--'}°C</p>
             </div>
-            <div className="rounded-2xl bg-slate-100 p-4">
-              <p className="text-xs text-slate-500">{t('humidity')}</p>
+            <div className="rounded-2xl bg-slate-100 dark:bg-slate-700 p-4">
+              <p className="text-xs text-slate-500 dark:text-slate-400">{t('humidity')}</p>
               <p className="text-xl font-semibold">{activeData.humidity?.toFixed(1) ?? '--'}%</p>
             </div>
-            <div className="rounded-2xl bg-slate-100 p-4">
-              <p className="text-xs text-slate-500">{t('phLevel')}</p>
+            <div className="rounded-2xl bg-slate-100 dark:bg-slate-700 p-4">
+              <p className="text-xs text-slate-500 dark:text-slate-400">{t('phLevel')}</p>
               <p className="text-xl font-semibold">{activeData.ph?.toFixed(2) ?? '--'}</p>
             </div>
-            <div className="rounded-2xl bg-slate-100 p-4">
-              <p className="text-xs text-slate-500">{t('waterUsage')}</p>
+            <div className="rounded-2xl bg-slate-100 dark:bg-slate-700 p-4">
+              <p className="text-xs text-slate-500 dark:text-slate-400">{t('waterUsage')}</p>
               <p className="text-xl font-semibold">{activeData.waterUsage ?? '--'} {t('mlPerMinute')}</p>
             </div>
           </div>
-          <p className="text-sm text-slate-600">{t('arduinoSensorSummary')}</p>
+          <p className="text-sm text-slate-600 dark:text-slate-400">{t('arduinoSensorSummary')}</p>
         </div>
       );
     }
@@ -158,11 +158,11 @@ const HardwareSensorDashboard = () => {
     : '';
 
   return (
-    <div className="mt-8 bg-white rounded-3xl shadow-md p-6">
+    <div className="mt-8 bg-white dark:bg-slate-800 rounded-3xl shadow-md p-6">
       <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">{t('hardwareSensorSection')}</h2>
-          <p className="text-sm text-gray-600">{t('hardwareSensorHoverDescription')}</p>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t('hardwareSensorSection')}</h2>
+          <p className="text-sm text-slate-700 dark:text-slate-300">{t('hardwareSensorHoverDescription')}</p>
         </div>
       </div>
 
@@ -175,7 +175,7 @@ const HardwareSensorDashboard = () => {
               <div key={areaId} className="rounded-3xl border border-slate-200 bg-slate-50 p-4">
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <p className="text-xs uppercase tracking-wider text-slate-500">{t('trayLabel')}</p>
+                    <p className="text-xs uppercase tracking-wider text-slate-700 dark:text-slate-300">{t('trayLabel')}</p>
                     <p className="text-xl font-semibold text-slate-900">{t('tray')} {areaId}</p>
                   </div>
                   <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
@@ -184,19 +184,19 @@ const HardwareSensorDashboard = () => {
                 </div>
                 <div className="grid gap-3 sm:grid-cols-2 mb-4">
                   <div className="rounded-3xl bg-white p-3 border border-slate-200">
-                    <p className="text-xs text-slate-500">{t('temperature')}</p>
+                    <p className="text-xs text-slate-700 dark:text-slate-300">{t('temperature')}</p>
                     <p className="text-lg font-semibold text-slate-900">{sensorValues.temperature?.toFixed(1) ?? '--'}°C</p>
                   </div>
                   <div className="rounded-3xl bg-white p-3 border border-slate-200">
-                    <p className="text-xs text-slate-500">{t('humidity')}</p>
+                    <p className="text-xs text-slate-700 dark:text-slate-300">{t('humidity')}</p>
                     <p className="text-lg font-semibold text-slate-900">{sensorValues.humidity?.toFixed(1) ?? '--'}%</p>
                   </div>
                   <div className="rounded-3xl bg-white p-3 border border-slate-200">
-                    <p className="text-xs text-slate-500">{t('phLevel')}</p>
+                    <p className="text-xs text-slate-700 dark:text-slate-300">{t('phLevel')}</p>
                     <p className="text-lg font-semibold text-slate-900">{sensorValues.ph?.toFixed(2) ?? '--'}</p>
                   </div>
                   <div className="rounded-3xl bg-white p-3 border border-slate-200">
-                    <p className="text-xs text-slate-500">{t('waterUsage')}</p>
+                    <p className="text-xs text-slate-700 dark:text-slate-300">{t('waterUsage')}</p>
                     <p className="text-lg font-semibold text-slate-900">{sensorValues.waterUsage ?? '--'} {t('mlPerMinute')}</p>
                   </div>
                 </div>
@@ -206,6 +206,10 @@ const HardwareSensorDashboard = () => {
                       type="button"
                       key={`${areaId}-${sensor.key}`}
                       onMouseEnter={() => setHoverState({ areaId, sensorKey: sensor.key })}
+                      onClick={() => {
+                        setGraphSelection({ areaId, sensorKey: sensor.key });
+                        setHoverState({ areaId, sensorKey: sensor.key });
+                      }}
                       className={`rounded-3xl border px-4 py-3 text-left transition duration-200 ${
                         hoverState.areaId === areaId && hoverState.sensorKey === sensor.key
                           ? 'border-green-500 bg-white shadow-lg'
@@ -216,7 +220,7 @@ const HardwareSensorDashboard = () => {
                         <span className="text-2xl">{sensor.icon}</span>
                         <div>
                           <p className="text-sm font-semibold text-slate-700">{t(sensor.labelKey)}</p>
-                          <p className="text-xs text-slate-500">
+                          <p className="text-xs text-slate-600 dark:text-slate-400">
                             {sensor.key === 'arduino'
                               ? t('connectedDevice')
                               : sensorValues[sensor.key] !== undefined
@@ -236,27 +240,37 @@ const HardwareSensorDashboard = () => {
         <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-sm uppercase tracking-wider text-slate-500">{t('sensorOverview')}</p>
+              <p className="text-sm uppercase tracking-wider text-slate-700 dark:text-slate-500">{t('sensorOverview')}</p>
               <h3 className="text-2xl font-bold text-slate-900">{activeSensor ? t(activeSensor.labelKey) : t('noSensorData')}</h3>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 w-full sm:w-auto">
               <label className="block">
-                <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">{t('selectTrayLabel')}</span>
+                <span className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300">{t('selectTrayLabel')}</span>
                 <select
                   value={graphSelection.areaId}
-                  onChange={(e) => setGraphSelection((prev) => ({ ...prev, areaId: e.target.value }))}
+                  onChange={(e) => {
+                    setGraphSelection((prev) => ({ ...prev, areaId: e.target.value }));
+                    setHoverState((prev) => ({ ...prev, areaId: e.target.value }));
+                  }}
                   className="mt-2 w-full rounded-2xl border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900"
                 >
-                  {AREA_IDS.map((areaId) => (
-                    <option value={areaId} key={areaId}>{`${t('tray')} ${areaId}`}</option>
-                  ))}
+                  {AREA_IDS.map((areaId) => {
+                    const area = areas[areaId];
+                    const cropName = area?.crop?.name ? ` (${area.crop.name})` : '';
+                    return (
+                      <option value={areaId} key={areaId}>{`${t('tray')} ${areaId}${cropName}`}</option>
+                    );
+                  })}
                 </select>
               </label>
               <label className="block">
-                <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">{t('selectSensorLabel')}</span>
+                <span className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300">{t('selectSensorLabel')}</span>
                 <select
                   value={graphSelection.sensorKey}
-                  onChange={(e) => setGraphSelection((prev) => ({ ...prev, sensorKey: e.target.value }))}
+                  onChange={(e) => {
+                    setGraphSelection((prev) => ({ ...prev, sensorKey: e.target.value }));
+                    setHoverState((prev) => ({ ...prev, sensorKey: e.target.value }));
+                  }}
                   className="mt-2 w-full rounded-2xl border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900"
                 >
                   {SENSOR_TYPES.filter((sensor) => ['temperature', 'humidity', 'ph'].includes(sensor.key)).map((sensor) => (

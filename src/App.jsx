@@ -7,14 +7,19 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import AreaManagement from './pages/AreaManagement';
+import HardwareSensor from './pages/HardwareSensor';
 import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
 import MLInsights from './pages/MLInsights';
 import AIChat from './pages/AIChat';
-<<<<<<< Updated upstream
-=======
+
+
+
 import SmartOptimization from './pages/SmartOptimization';
->>>>>>> Stashed changes
+
+import HardwareSensor from './pages/HardwareSensor';
+import SmartOptimization from './pages/SmartOptimization';
+
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 
@@ -26,7 +31,17 @@ function App() {
           <AuthProvider>
             <AppProvider>
               <Routes>
-                {/* Public Routes */}
+                <Route
+                path="/smart-optimization"
+                element={
+                  <ProtectedRoute>
+                    <Layout>
+                      <SmartOptimization />
+                    </Layout>
+                  </ProtectedRoute>
+                }
+              />
+              {/* Public Routes */}
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
 
@@ -52,6 +67,16 @@ function App() {
                 }
               />
               <Route
+                path="/hardware-sensor"
+                element={
+                  <ProtectedRoute>
+                    <Layout>
+                      <HardwareSensor />
+                    </Layout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="/analytics"
                 element={
                   <ProtectedRoute>
@@ -72,6 +97,16 @@ function App() {
                 }
               />
               <Route
+                path="/hardware-sensor"
+                element={
+                  <ProtectedRoute>
+                    <Layout>
+                      <HardwareSensor />
+                    </Layout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="/settings"
                 element={
                   <ProtectedRoute>
@@ -87,6 +122,16 @@ function App() {
                   <ProtectedRoute>
                     <Layout>
                       <AIChat />
+                    </Layout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/hardware-sensor"
+                element={
+                  <ProtectedRoute>
+                    <Layout>
+                      <HardwareSensor />
                     </Layout>
                   </ProtectedRoute>
                 }

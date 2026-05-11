@@ -10,7 +10,7 @@ export const createAutomationTask = (areaId, taskType, config = {}) => {
   const timestamp = new Date().toISOString();
 
   const baseTask = {
-    id: `task_${areaId}_${taskType}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+    id: `task_${areaId}_${taskType}_${Date.now()}`,
     areaId,
     taskType, // 'watering', 'lighting', 'climate', 'nutrients'
     createdAt: timestamp,
