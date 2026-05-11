@@ -92,7 +92,7 @@ VITE_FIREBASE_APP_ID=your-app-id
 
 **Note**: Without Firebase setup, the app will use localStorage for authentication, which works for development and testing.
 
-Getting Started
+Deploying thr web app
 
 git clone https://github.com/zeecool123/Farmsense.git
 
