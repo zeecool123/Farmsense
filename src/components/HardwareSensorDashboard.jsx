@@ -59,24 +59,24 @@ const HardwareSensorDashboard = () => {
       return (
         <div className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
-            <div className="rounded-2xl bg-slate-100 p-4">
-              <p className="text-xs text-slate-500">{t('temperature')}</p>
+            <div className="rounded-2xl bg-slate-100 dark:bg-slate-700 p-4">
+              <p className="text-xs text-slate-500 dark:text-slate-400">{t('temperature')}</p>
               <p className="text-xl font-semibold">{activeData.temperature?.toFixed(1) ?? '--'}°C</p>
             </div>
-            <div className="rounded-2xl bg-slate-100 p-4">
-              <p className="text-xs text-slate-500">{t('humidity')}</p>
+            <div className="rounded-2xl bg-slate-100 dark:bg-slate-700 p-4">
+              <p className="text-xs text-slate-500 dark:text-slate-400">{t('humidity')}</p>
               <p className="text-xl font-semibold">{activeData.humidity?.toFixed(1) ?? '--'}%</p>
             </div>
-            <div className="rounded-2xl bg-slate-100 p-4">
-              <p className="text-xs text-slate-500">{t('phLevel')}</p>
+            <div className="rounded-2xl bg-slate-100 dark:bg-slate-700 p-4">
+              <p className="text-xs text-slate-500 dark:text-slate-400">{t('phLevel')}</p>
               <p className="text-xl font-semibold">{activeData.ph?.toFixed(2) ?? '--'}</p>
             </div>
-            <div className="rounded-2xl bg-slate-100 p-4">
-              <p className="text-xs text-slate-500">{t('waterUsage')}</p>
+            <div className="rounded-2xl bg-slate-100 dark:bg-slate-700 p-4">
+              <p className="text-xs text-slate-500 dark:text-slate-400">{t('waterUsage')}</p>
               <p className="text-xl font-semibold">{activeData.waterUsage ?? '--'} {t('mlPerMinute')}</p>
             </div>
           </div>
-          <p className="text-sm text-slate-600">{t('arduinoSensorSummary')}</p>
+          <p className="text-sm text-slate-600 dark:text-slate-400">{t('arduinoSensorSummary')}</p>
         </div>
       );
     }
@@ -158,10 +158,10 @@ const HardwareSensorDashboard = () => {
     : '';
 
   return (
-    <div className="mt-8 bg-white rounded-3xl shadow-md p-6">
+    <div className="mt-8 bg-white dark:bg-slate-800 rounded-3xl shadow-md p-6">
       <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">{t('hardwareSensorSection')}</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t('hardwareSensorSection')}</h2>
           <p className="text-sm text-gray-600">{t('hardwareSensorHoverDescription')}</p>
         </div>
       </div>

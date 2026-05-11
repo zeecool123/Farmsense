@@ -62,7 +62,7 @@ const Dashboard = () => {
       {/* Quick Actions */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
         <div className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-xl shadow p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-3">{t('quickActions')}</h2>
+          <h2 className="text-2xl font-bold text-white mb-3">{t('quickActions')}</h2>
           <p className="text-cyan-100 mb-4">{t('jumpIntoWorkflows')}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Link to="/areas" className="rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white px-4 py-3 font-semibold text-sm shadow transition backdrop-blur-sm">
