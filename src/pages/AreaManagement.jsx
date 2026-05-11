@@ -147,6 +147,8 @@ const AreaManagement = () => {
         </div>
       </div>
 
+      <HardwareSensorDashboard />
+
       {/* Control Center */}
       <div className="mt-8 bg-white rounded-lg shadow-md p-6">
         <h2 className="text-2xl font-bold mb-4">{t('systemControlsLabel')}</h2>

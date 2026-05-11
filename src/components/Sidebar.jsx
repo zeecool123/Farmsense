@@ -11,6 +11,7 @@ const Sidebar = () => {
     { path: '/areas', label: t('areaManagement'), icon: '🌱' },
     { path: '/analytics', label: t('analyticsAndTrends'), icon: '📈' },
     { path: '/ml-insights', label: t('mlInsights'), icon: '🤖' },
+    { path: '/ai-chat', label: t('aiChat', 'AI Assistant'), icon: '💬' },
     { path: '/settings', label: t('settings'), icon: '⚙️' },
   ];
 

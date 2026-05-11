@@ -10,6 +10,7 @@ import AreaManagement from './pages/AreaManagement';
 import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
 import MLInsights from './pages/MLInsights';
+import AIChat from './pages/AIChat';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 
@@ -72,6 +73,16 @@ function App() {
                   <ProtectedRoute>
                     <Layout>
                       <Settings />
+                    </Layout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/ai-chat"
+                element={
+                  <ProtectedRoute>
+                    <Layout>
+                      <AIChat />
                     </Layout>
                   </ProtectedRoute>
                 }
