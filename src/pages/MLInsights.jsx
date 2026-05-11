@@ -1,7 +1,9 @@
-import React, { useState, useMemo } from 'react';
+
+import React, { useState, useMemo, useEffect } from 'react';
+
 import { useApp } from '../context/AppContext';
 import { useLanguage } from '../context/LanguageContext';
-import { TRAY_IDS } from '../utils/constants';
+import { AREA_IDS } from '../utils/constants';
 import {
   predictCropYield,
   predictHarvestTime,
@@ -9,17 +11,45 @@ import {
   predictWaterConsumption,
   predictResourceEfficiency,
   predictAnomalies,
+
+  getAIRecommendations,
+
+
 } from '../utils/mlPredictions';
 
 const MLInsights = () => {
-  const { trays, sensorData, sensorHistory } = useApp();
+  const { areas, sensorData, sensorHistory } = useApp();
   const { t } = useLanguage();
-  const [selectedTray, setSelectedTray] = useState('A');
+  const [selectedArea, setSelectedArea] = useState('A');
   const [growthStage, setGrowthStage] = useState('vegetative');
 
-  const tray = trays[selectedTray];
-  const currentSensorData = sensorData[selectedTray];
-  const selectedTrayHistory = sensorHistory[selectedTray] || [];
+  const [aiRecommendations, setAiRecommendations] = useState(null);
+
+
+
+  const area = areas[selectedArea];
+  const currentSensorData = sensorData[selectedArea];
+  const selectedAreaHistory = sensorHistory[selectedArea] || [];
+
+
+  // Load AI recommendations
+  useEffect(() => {
+    const loadRecommendations = async () => {
+      if (area?.cropKey && currentSensorData) {
+        try {
+          const recs = await getAIRecommendations(area.cropKey, currentSensorData);
+          setAiRecommendations(recs);
+        } catch (error) {
+          console.error('Error loading AI recommendations:', error);
+          setAiRecommendations(null);
+        }
+      } else {
+        setAiRecommendations(null);
+      }
+    };
+    loadRecommendations();
+  }, [area?.cropKey, currentSensorData]);
+
 
   const mockHistory = useMemo(() => {
     return Array.from({ length: 20 }, (_, i) => ({
@@ -29,45 +59,45 @@ const MLInsights = () => {
       ph: (currentSensorData?.ph || 6.5) + (Math.random() - 0.5) * 0.3,
       waterUsage: (currentSensorData?.waterUsage || 150) + (Math.random() - 0.5) * 50,
     }));
-  }, [selectedTray, currentSensorData]);
+  }, [selectedArea, currentSensorData]);
 
-  const historyForPrediction = selectedTrayHistory.length > 0 ? selectedTrayHistory : mockHistory;
+  const historyForPrediction = selectedAreaHistory.length > 0 ? selectedAreaHistory : mockHistory;
 
   const yieldPrediction = useMemo(
-    () => (tray?.cropKey ? predictCropYield(historyForPrediction, tray.cropKey) : null),
-    [tray?.cropKey, historyForPrediction]
+    () => (area?.cropKey ? predictCropYield(historyForPrediction, area.cropKey) : null),
+    [area?.cropKey, historyForPrediction]
   );
 
   const harvestPrediction = useMemo(
-    () => (tray?.cropKey ? predictHarvestTime(tray.cropKey, historyForPrediction, 25) : null),
-    [tray?.cropKey, historyForPrediction]
+    () => (area?.cropKey ? predictHarvestTime(area.cropKey, historyForPrediction, 25) : null),
+    [area?.cropKey, historyForPrediction]
   );
 
   const nutrients = useMemo(
-    () => tray?.cropKey ? estimateNutrientRequirements(tray.cropKey, historyForPrediction, growthStage) : null,
-    [tray?.cropKey, historyForPrediction, growthStage]
+    () => area?.cropKey ? estimateNutrientRequirements(area.cropKey, historyForPrediction, growthStage) : null,
+    [area?.cropKey, historyForPrediction, growthStage]
   );
 
   const water = useMemo(
     () =>
-      tray?.cropKey && currentSensorData
-        ? predictWaterConsumption(tray.cropKey, currentSensorData.temperature, currentSensorData.humidity)
+      area?.cropKey && currentSensorData
+        ? predictWaterConsumption(area.cropKey, currentSensorData.temperature, currentSensorData.humidity)
         : null,
-    [tray?.cropKey, currentSensorData]
+    [area?.cropKey, currentSensorData]
   );
 
   const efficiency = useMemo(() => predictResourceEfficiency(historyForPrediction), [historyForPrediction]);
 
   const anomalies = useMemo(
-    () => tray?.cropKey ? predictAnomalies(historyForPrediction, tray.cropKey) : null,
-    [tray?.cropKey, historyForPrediction]
+    () => area?.cropKey ? predictAnomalies(historyForPrediction, area.cropKey) : null,
+    [area?.cropKey, historyForPrediction]
   );
 
-  if (!tray) {
+  if (!area) {
     return (
       <div className="p-8">
         <h1 className="text-4xl font-bold text-gray-800 mb-2">{t('mlInsights')}</h1>
-        <p className="text-gray-600">{t('noTraySelected')}</p>
+        <p className="text-gray-600">{t('noAreaSelected')}</p>
       </div>
     );
   }
@@ -78,7 +108,7 @@ const MLInsights = () => {
         <h1 className="text-4xl font-bold text-gray-800 mb-2">🤖 {t('mlInsights')}</h1>
         <p className="text-gray-600">{t('aiPoweredPredictions')}</p>
         <p className="text-sm text-gray-500 mt-1">
-          {selectedTrayHistory.length > 0 ? t('usingRealTrayHistory') : t('usingFallbackSensorData')}
+          {selectedAreaHistory.length > 0 ? t('usingRealTrayHistory') : t('usingFallbackSensorData')}
         </p>
       </div>
 
@@ -88,13 +118,13 @@ const MLInsights = () => {
           <div>
             <label className="block text-sm font-semibold mb-2">{t('selectTrayLabel')}</label>
             <select
-              value={selectedTray}
-              onChange={(e) => setSelectedTray(e.target.value)}
+              value={selectedArea}
+              onChange={(e) => setSelectedArea(e.target.value)}
               className="w-full border rounded px-4 py-2"
             >
-              {TRAY_IDS.map((id) => (
+              {AREA_IDS.map((id) => (
                 <option key={id} value={id}>
-                  {t('tray')} {id} {trays[id]?.crop?.icon}
+                  {t('area')} {id} {areas[id]?.crop?.icon}
                 </option>
               ))}
             </select>
@@ -114,13 +144,61 @@ const MLInsights = () => {
         </div>
       </div>
 
-      {/* Tray Info */}
-      {tray && (
+
+      {/* AI Recommendations */}
+      {aiRecommendations && (
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <h2 className="text-2xl font-bold mb-4">🤖 {t('aiRecommendations')}</h2>
+          <div className="mb-4">
+            <div className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${
+              aiRecommendations.overallStatus === 'optimal' ? 'bg-green-100 text-green-800' :
+              aiRecommendations.overallStatus === 'good' ? 'bg-blue-100 text-blue-800' :
+              'bg-yellow-100 text-yellow-800'
+            }`}>
+              {aiRecommendations.overallStatus === 'optimal' ? '✅ Optimal' :
+               aiRecommendations.overallStatus === 'good' ? '🟢 Good' :
+               '🟡 Needs Attention'}
+            </div>
+            <p className="text-sm text-gray-600 mt-2">{aiRecommendations.summary}</p>
+          </div>
+          {aiRecommendations.recommendations.length > 0 && (
+            <div className="space-y-3">
+              {aiRecommendations.recommendations.map((rec, idx) => (
+                <div key={idx} className={`p-4 rounded-lg border-l-4 ${
+                  rec.priority === 'high' ? 'border-red-500 bg-red-50' :
+                  rec.priority === 'medium' ? 'border-yellow-500 bg-yellow-50' :
+                  'border-blue-500 bg-blue-50'
+                }`}>
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="font-semibold text-gray-900">{rec.parameter}</h3>
+                      <p className="text-sm text-gray-700 mt-1">{rec.action}</p>
+                      <p className="text-xs text-gray-600 mt-1">{rec.reason}</p>
+                    </div>
+                    <div className={`px-2 py-1 rounded text-xs font-semibold ${
+                      rec.priority === 'high' ? 'bg-red-200 text-red-800' :
+                      rec.priority === 'medium' ? 'bg-yellow-200 text-yellow-800' :
+                      'bg-blue-200 text-blue-800'
+                    }`}>
+                      {rec.priority.toUpperCase()}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+
+
+      {/* Area Info */}
+      {area && (
         <div className="bg-gradient-to-r from-purple-500 to-blue-600 text-white rounded-lg shadow-md p-6 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
               <p className="text-purple-100 text-sm">{t('cropLabel')}</p>
-              <p className="text-2xl font-bold">{tray.crop?.name} {tray.crop?.icon}</p>
+              <p className="text-2xl font-bold">{area.crop?.name} {area.crop?.icon}</p>
             </div>
             <div>
               <p className="text-purple-100 text-sm">{t('growStageLabel')}</p>

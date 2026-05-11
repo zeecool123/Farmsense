@@ -6,16 +6,17 @@ import { LanguageProvider } from './context/LanguageContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
-import TrayManagement from './pages/TrayManagement';
+import AreaManagement from './pages/AreaManagement';
 import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
 import MLInsights from './pages/MLInsights';
+import AIChat from './pages/AIChat';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 
 function App() {
   return (
-    <Router>
+    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <ThemeProvider>
         <LanguageProvider>
           <AuthProvider>
@@ -37,11 +38,11 @@ function App() {
                 }
               />
               <Route
-                path="/trays"
+                path="/areas"
                 element={
                   <ProtectedRoute>
                     <Layout>
-                      <TrayManagement />
+                      <AreaManagement />
                     </Layout>
                   </ProtectedRoute>
                 }
@@ -72,6 +73,16 @@ function App() {
                   <ProtectedRoute>
                     <Layout>
                       <Settings />
+                    </Layout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/ai-chat"
+                element={
+                  <ProtectedRoute>
+                    <Layout>
+                      <AIChat />
                     </Layout>
                   </ProtectedRoute>
                 }

@@ -3,21 +3,21 @@ import { useApp } from '../context/AppContext';
 import { useLanguage } from '../context/LanguageContext';
 import SensorChart from '../components/SensorChart';
 import SensorReading from '../components/SensorReading';
-import { TRAY_IDS } from '../utils/constants';
+import { AREA_IDS } from '../utils/constants';
 import { predictCropYield, predictHarvestTime } from '../utils/mlPredictions';
 
 const Analytics = () => {
-  const { trays, sensorData, aiScores, sensorHistory } = useApp();
+  const { areas, sensorData, aiScores, sensorHistory } = useApp();
   const { t } = useLanguage();
-  const [selectedTray, setSelectedTray] = useState('A');
+  const [selectedArea, setSelectedArea] = useState('A');
   const [chartData, setChartData] = useState([]);
   const [timeRange, setTimeRange] = useState(24); // hours
-  const selectedTrayHistory = sensorHistory[selectedTray] || [];
+  const selectedAreaHistory = sensorHistory[selectedArea] || [];
 
   useEffect(() => {
-    if (selectedTrayHistory.length > 1) {
+    if (selectedAreaHistory.length > 1) {
       setChartData(
-        selectedTrayHistory.map((entry) => ({
+        selectedAreaHistory.map((entry) => ({
           // MODIFIED: Added 'second: 2-digit' so the x-axis actually moves!
           time: new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
           temperature: entry.temperature,
@@ -51,20 +51,20 @@ const Analytics = () => {
       });
     }
     setChartData(data);
-  }, [selectedTray, timeRange, selectedTrayHistory]);
+  }, [selectedArea, timeRange, selectedAreaHistory]);
 
-  const currentSensorData = sensorData[selectedTray];
-  const tray = trays[selectedTray];
-  const historyForPrediction = selectedTrayHistory.length > 0 ? selectedTrayHistory : chartData;
+  const currentSensorData = sensorData[selectedArea];
+  const area = areas[selectedArea];
+  const historyForPrediction = selectedAreaHistory.length > 0 ? selectedAreaHistory : chartData;
 
   const yieldPrediction = useMemo(
-    () => (tray?.cropKey ? predictCropYield(historyForPrediction, tray.cropKey) : null),
-    [tray?.cropKey, historyForPrediction]
+    () => (area?.cropKey ? predictCropYield(historyForPrediction, area.cropKey) : null),
+    [area?.cropKey, historyForPrediction]
   );
 
   const harvestPrediction = useMemo(
-    () => (tray?.cropKey ? predictHarvestTime(tray.cropKey, historyForPrediction, 25) : null),
-    [tray?.cropKey, historyForPrediction]
+    () => (area?.cropKey ? predictHarvestTime(area.cropKey, historyForPrediction, 25) : null),
+    [area?.cropKey, historyForPrediction]
   );
 
   return (
@@ -79,15 +79,15 @@ const Analytics = () => {
       <div className="bg-white rounded-lg shadow-md p-6 mb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-semibold mb-2">{t('selectTrayLabel')}</label>
+            <label className="block text-sm font-semibold mb-2">{t('selectAreaLabel')}</label>
             <select
-              value={selectedTray}
-              onChange={(e) => setSelectedTray(e.target.value)}
+              value={selectedArea}
+              onChange={(e) => setSelectedArea(e.target.value)}
               className="w-full border rounded px-4 py-2"
             >
-              {TRAY_IDS.map((tray) => (
-                <option key={tray} value={tray}>
-                  {t('tray')} {tray}
+              {AREA_IDS.map((area) => (
+                <option key={area} value={area}>
+                  {t('area')} {area}
                 </option>
               ))}
             </select>
@@ -109,21 +109,21 @@ const Analytics = () => {
         </div>
       </div>
 
-      {/* Tray Info */}
-      {tray && (
+      {/* Area Info */}
+      {area && (
         <div className="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg shadow-md p-6 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
               <p className="text-green-100 text-sm">{t('cropLabel')}</p>
-              <p className="text-2xl font-bold">{tray.crop?.name} {tray.crop?.icon}</p>
+              <p className="text-2xl font-bold">{area.crop?.name} {area.crop?.icon}</p>
             </div>
             <div>
               <p className="text-green-100 text-sm">{t('aiScoreLabel')}</p>
-              <p className="text-2xl font-bold">{aiScores[selectedTray] || 0}/100</p>
+              <p className="text-2xl font-bold">{aiScores[selectedArea] || 0}/100</p>
             </div>
             <div>
               <p className="text-green-100 text-sm">{t('statusLabel')}</p>
-              <p className="text-2xl font-bold">🟢 {tray.status}</p>
+              <p className="text-2xl font-bold">🟢 {area.status}</p>
             </div>
             <div>
               <p className="text-green-100 text-sm">{t('lastUpdate')}</p>
@@ -147,9 +147,9 @@ const Analytics = () => {
             unit="°C"
             icon="🌡️"
             status={
-              tray?.crop &&
-              currentSensorData?.temperature >= tray.crop.optimalTemp.min &&
-              currentSensorData?.temperature <= tray.crop.optimalTemp.max
+              area?.crop &&
+              currentSensorData?.temperature >= area.crop.optimalTemp.min &&
+              currentSensorData?.temperature <= area.crop.optimalTemp.max
                 ? 'optimal'
                 : 'warning'
             }
@@ -160,9 +160,9 @@ const Analytics = () => {
             unit="%"
             icon="💧"
             status={
-              tray?.crop &&
-              currentSensorData?.humidity >= tray.crop.optimalHumidity.min &&
-              currentSensorData?.humidity <= tray.crop.optimalHumidity.max
+              area?.crop &&
+              currentSensorData?.humidity >= area.crop.optimalHumidity.min &&
+              currentSensorData?.humidity <= area.crop.optimalHumidity.max
                 ? 'optimal'
                 : 'warning'
             }
@@ -173,9 +173,9 @@ const Analytics = () => {
             unit=""
             icon="⚗️"
             status={
-              tray?.crop &&
-              currentSensorData?.ph >= tray.crop.optimalPH.min &&
-              currentSensorData?.ph <= tray.crop.optimalPH.max
+              area?.crop &&
+              currentSensorData?.ph >= area.crop.optimalPH.min &&
+              currentSensorData?.ph <= area.crop.optimalPH.max
                 ? 'optimal'
                 : 'warning'
             }
@@ -196,7 +196,7 @@ const Analytics = () => {
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('yieldForecastHeading')}</h2>
             <p className="text-sm text-gray-600 mb-4">
-              {selectedTrayHistory.length > 0 ? t('usingRealSensorHistory') : t('usingFallbackTrendData')}
+              {selectedAreaHistory.length > 0 ? t('usingRealSensorHistory') : t('usingFallbackTrendData')}
             </p>
             <div className="space-y-3">
               <div className="text-5xl font-bold text-green-600">{yieldPrediction?.estimatedYield || t('noData')}</div>
@@ -262,29 +262,29 @@ const Analytics = () => {
       </div>
 
       {/* Optimal Parameters */}
-      {tray?.crop && (
+      {area?.crop && (
         <div className="mt-8 bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('optimalParametersFor', { cropName: tray.crop.name })}</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('optimalParametersFor', { cropName: area.crop.name })}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             <div className="border-l-4 border-orange-500 pl-4">
               <p className="text-gray-600 text-sm">{t('temperature')}</p>
-              <p className="text-lg font-bold">{tray.crop.optimalTemp.min}-{tray.crop.optimalTemp.max}°C</p>
+              <p className="text-lg font-bold">{area.crop.optimalTemp.min}-{area.crop.optimalTemp.max}°C</p>
             </div>
             <div className="border-l-4 border-blue-500 pl-4">
               <p className="text-gray-600 text-sm">{t('humidity')}</p>
-              <p className="text-lg font-bold">{tray.crop.optimalHumidity.min}-{tray.crop.optimalHumidity.max}%</p>
+              <p className="text-lg font-bold">{area.crop.optimalHumidity.min}-{area.crop.optimalHumidity.max}%</p>
             </div>
             <div className="border-l-4 border-green-500 pl-4">
               <p className="text-gray-600 text-sm">{t('pHTrend')}</p>
-              <p className="text-lg font-bold">{tray.crop.optimalPH.min}-{tray.crop.optimalPH.max}</p>
+              <p className="text-lg font-bold">{area.crop.optimalPH.min}-{area.crop.optimalPH.max}</p>
             </div>
             <div className="border-l-4 border-purple-500 pl-4">
               <p className="text-gray-600 text-sm">{t('waterUsage')}</p>
-              <p className="text-lg font-bold">{tray.crop.optimalWaterUsage.min}-{tray.crop.optimalWaterUsage.max}ml/day</p>
+              <p className="text-lg font-bold">{area.crop.optimalWaterUsage.min}-{area.crop.optimalWaterUsage.max}ml/day</p>
             </div>
             <div className="border-l-4 border-yellow-500 pl-4">
               <p className="text-gray-600 text-sm">{t('lightHours')}</p>
-              <p className="text-lg font-bold">{tray.crop.optimalLight.min}-{tray.crop.optimalLight.max}h/day</p>
+              <p className="text-lg font-bold">{area.crop.optimalLight.min}-{area.crop.optimalLight.max}h/day</p>
             </div>
           </div>
         </div>
