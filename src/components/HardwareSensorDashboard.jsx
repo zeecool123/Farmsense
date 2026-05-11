@@ -161,7 +161,7 @@ const HardwareSensorDashboard = () => {
     <div className="mt-8 bg-white rounded-3xl shadow-md p-6">
       <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">{t('hardwareSensorSection')}</h2>
+          <h2 className="text-2xl font-bold text-black">{t('hardwareSensorSection')}</h2>
           <p className="text-sm text-gray-600">{t('hardwareSensorHoverDescription')}</p>
         </div>
       </div>
