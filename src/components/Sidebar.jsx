@@ -8,7 +8,7 @@ const Sidebar = () => {
 
   const navItems = [
     { path: '/', label: t('dashboard'), icon: '📊' },
-    { path: '/areas', label: t('areaManagement'), icon: '🌱' },
+    { path: '/trays', label: t('trayManagement'), icon: '🌱' },
     { path: '/analytics', label: t('analyticsAndTrends'), icon: '📈' },
     { path: '/ml-insights', label: t('mlInsights'), icon: '🤖' },
     { path: '/hardware-sensor', label: t('hardwareSensor'), icon: '🔧' },
