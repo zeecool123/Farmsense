@@ -105,7 +105,7 @@ const MLInsights = () => {
   return (
     <div className="p-8">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-800 mb-2">🤖 {t('mlInsights')}</h1>
+        <h1 className="text-4xl font-bold text-black dark:text-white mb-2">🤖 {t('mlInsights')}</h1>
         <p className="text-gray-600">{t('aiPoweredPredictions')}</p>
         <p className="text-sm text-gray-500 mt-1">
           {selectedAreaHistory.length > 0 ? t('usingRealTrayHistory') : t('usingFallbackSensorData')}
@@ -151,7 +151,7 @@ const MLInsights = () => {
       {/* AI Recommendations */}
       {aiRecommendations && (
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-2xl font-bold mb-4">🤖 {t('aiRecommendations')}</h2>
+          <h2 className="text-2xl font-bold text-black mb-4">🤖 {t('aiRecommendations')}</h2>
           <div className="mb-4">
             <div className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${
               aiRecommendations.overallStatus === 'optimal' ? 'bg-green-100 text-green-800' :
@@ -222,7 +222,7 @@ const MLInsights = () => {
       {/* Main Predictions Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">📊 {t('yieldPredictionTitle')}</h2>
+          <h2 className="text-2xl font-bold text-black mb-4">📊 {t('yieldPredictionTitle')}</h2>
           {yieldPrediction && (
             <div className="space-y-4">
               <div className="text-center py-4 bg-gradient-to-r from-green-100 to-green-50 rounded-lg">
@@ -250,7 +250,7 @@ const MLInsights = () => {
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">🌾 {t('harvestPredictionTitle')}</h2>
+          <h2 className="text-2xl font-bold text-black mb-4">🌾 {t('harvestPredictionTitle')}</h2>
           {harvestPrediction && (
             <div className="space-y-4">
               <div className="text-center py-4 bg-gradient-to-r from-amber-100 to-amber-50 rounded-lg">
@@ -278,7 +278,7 @@ const MLInsights = () => {
       {/* Nutrients & Water */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">🧪 {t('nutrientRequirements')}</h2>
+          <h2 className="text-2xl font-bold text-black mb-4">🧪 {t('nutrientRequirements')}</h2>
           {nutrients && (
             <div className="space-y-4">
               <p className="text-sm text-gray-600 mb-3">{nutrients.recommendation}</p>
@@ -325,7 +325,7 @@ const MLInsights = () => {
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">💧 {t('waterConsumptionForecast')}</h2>
+          <h2 className="text-2xl font-bold text-black mb-4">💧 {t('waterConsumptionForecast')}</h2>
           {water && (
             <div className="space-y-4">
               <div className="text-center py-4 bg-gradient-to-r from-cyan-100 to-cyan-50 rounded-lg">
@@ -354,7 +354,7 @@ const MLInsights = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">⚡ {t('resourceEfficiency')}</h2>
+          <h2 className="text-2xl font-bold text-black mb-4">⚡ {t('resourceEfficiency')}</h2>
           {efficiency && (
             <div className="space-y-4">
               <div className="text-center py-4 bg-gradient-to-r from-indigo-100 to-indigo-50 rounded-lg">
@@ -374,7 +374,7 @@ const MLInsights = () => {
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">🚨 {t('anomalyDetection')}</h2>
+          <h2 className="text-2xl font-bold text-black mb-4">🚨 {t('anomalyDetection')}</h2>
           {anomalies && (
             <div className="space-y-4">
               <div className="text-center py-4 rounded-lg" style={{

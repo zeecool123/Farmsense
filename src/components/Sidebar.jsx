@@ -1,7 +1,6 @@
 import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-
 
 const Sidebar = () => {
   const location = useLocation();
@@ -9,12 +8,13 @@ const Sidebar = () => {
 
   const navItems = [
     { path: '/', label: t('dashboard'), icon: '📊' },
-    { path: '/areas', label: t('areaManagement'), icon: '🌱' },
+    { path: '/trays', label: t('trayManagement'), icon: '🌱' },
     { path: '/analytics', label: t('analyticsAndTrends'), icon: '📈' },
     { path: '/ml-insights', label: t('mlInsights'), icon: '🤖' },
     { path: '/hardware-sensor', label: t('hardwareSensorSection'), icon: '🔌' },
     { path: '/ai-chat', label: t('aiChat', 'AI Assistant'), icon: '💬' },
     { path: '/smart-optimization', label: 'Smart Optimization', icon: '🌱' },
+    { path: '/hardware-sensor', label: t('hardwareSensor'), icon: '🔧' },
     { path: '/settings', label: t('settings'), icon: '⚙️' },
   ];
 
@@ -35,7 +35,7 @@ const Sidebar = () => {
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
             return (
-              <NavLink
+              <Link
                 key={item.path}
                 to={item.path}
                 className={`flex items-center gap-4 px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
@@ -46,7 +46,7 @@ const Sidebar = () => {
               >
                 <span className={`text-xl transition-transform duration-200 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`}>{item.icon}</span>
                 <span>{item.label}</span>
-              </NavLink>
+              </Link>
             );
           })}
         </nav>
