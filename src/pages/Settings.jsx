@@ -12,7 +12,7 @@ const Settings = () => {
       <div className="space-y-6 max-w-2xl">
         {/* Account Settings */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold mb-4">{t('accountSettings')}</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('accountSettings')}</h2>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-semibold mb-2">{t('emailLabel')}</label>
@@ -38,7 +38,7 @@ const Settings = () => {
 
         {/* Notifications */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold mb-4">{t('notificationsHeading')}</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('notificationsHeading')}</h2>
           <div className="space-y-3">
             <label className="flex items-center gap-3">
               <input type="checkbox" defaultChecked className="w-4 h-4" />
@@ -57,7 +57,7 @@ const Settings = () => {
 
         {/* System Settings */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold mb-4">{t('systemSettings')}</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('systemSettings')}</h2>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-semibold mb-2">{t('dataRefreshInterval')}</label>

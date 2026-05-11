@@ -63,7 +63,7 @@ const Dashboard = () => {
       {/* Quick Actions */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
         <div className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-xl shadow p-6">
-          <h2 className="text-2xl font-bold mb-3">{t('quickActions')}</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">{t('quickActions')}</h2>
           <p className="text-cyan-100 mb-4">{t('jumpIntoWorkflows')}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Link
@@ -94,7 +94,7 @@ const Dashboard = () => {
         </div>
 
         <div className="bg-white rounded-xl shadow p-6 border border-slate-100">
-          <h2 className="text-2xl font-bold mb-3">{t('howToUseFarmsense')}</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">{t('howToUseFarmsense')}</h2>
           <ol className="list-decimal list-inside space-y-3 text-slate-700">
             <li>{t('assignYourTrays')}</li>
             <li>{t('monitorLiveConditions')}</li>
@@ -108,7 +108,7 @@ const Dashboard = () => {
       {/* Alerts Section */}
       {alerts.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-4">{t('recentAlerts')} ({alerts.length})</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('recentAlerts')} ({alerts.length})</h2>
           <div className="max-w-3xl">
             {alerts.slice(0, 5).map((alert) => (
               <AlertBox
@@ -126,7 +126,7 @@ const Dashboard = () => {
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg shadow-md p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <p className="text-sm uppercase tracking-widest text-blue-200">{t('aiDrivenInsights')}</p>
-            <h2 className="text-3xl font-bold mt-2">{t('exploreMLInsights')}</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mt-2">{t('exploreMLInsights')}</h2>
             <p className="mt-2 text-blue-100 max-w-xl">
               {t('goToMLInsights')} {t('viewAnalytics')}
             </p>
@@ -142,7 +142,7 @@ const Dashboard = () => {
 
       {/* Trays Grid */}
       <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">{t('trayStatus')}</h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('trayStatus')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {TRAY_IDS.map((trayId) => {
             const tray = trays[trayId];
@@ -164,7 +164,7 @@ const Dashboard = () => {
       {selectedTrayData && (
         <div className="bg-white rounded-lg shadow-md p-6 space-y-6">
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold">{t('trayDetails', { trayId: selectedTray })}</h2>
+            <h2 className="text-2xl font-bold text-gray-900">{t('trayDetails', { trayId: selectedTray })}</h2>
             <button
               onClick={() => setSelectedTray(null)}
               className="text-gray-400 hover:text-gray-600 text-2xl"
