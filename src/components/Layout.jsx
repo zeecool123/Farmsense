@@ -9,7 +9,7 @@ const Layout = ({ children, userEmail }) => {
   return (
     <ResourceProvider>
       <AutomationProvider>
-        <div className="flex min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+        <div className="flex min-h-screen bg-gradient-to-br from-slate-100 via-white to-slate-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
           <Sidebar />
           <div className="flex-1 ml-64 flex flex-col overflow-hidden">
             <Navbar userEmail={userEmail} />

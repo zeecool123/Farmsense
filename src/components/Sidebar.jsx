@@ -12,6 +12,7 @@ const Sidebar = () => {
     { path: '/areas', label: t('areaManagement'), icon: '🌱' },
     { path: '/analytics', label: t('analyticsAndTrends'), icon: '📈' },
     { path: '/ml-insights', label: t('mlInsights'), icon: '🤖' },
+    { path: '/hardware-sensor', label: t('hardwareSensorSection'), icon: '🔌' },
     { path: '/ai-chat', label: t('aiChat', 'AI Assistant'), icon: '💬' },
     { path: '/smart-optimization', label: 'Smart Optimization', icon: '🌱' },
     { path: '/settings', label: t('settings'), icon: '⚙️' },

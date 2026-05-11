@@ -85,11 +85,14 @@ const Analytics = () => {
               onChange={(e) => setSelectedArea(e.target.value)}
               className="w-full border rounded px-4 py-2"
             >
-              {AREA_IDS.map((area) => (
-                <option key={area} value={area}>
-                  {t('area')} {area}
-                </option>
-              ))}
+              {AREA_IDS.map((area) => {
+                const cropName = areas[area]?.crop?.name ? ` (${areas[area].crop.name})` : '';
+                return (
+                  <option key={area} value={area}>
+                    {t('area')} {area}{cropName}
+                  </option>
+                );
+              })}
             </select>
           </div>
           <div>
