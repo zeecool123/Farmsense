@@ -2,6 +2,7 @@
  * Resource Context
  * Manages state for resource tracking (water, electricity, costs)
  */
+/* eslint react-refresh/only-export-components: 0 */
 
 import { createContext, useContext, useState, useCallback } from 'react';
 
@@ -37,7 +38,7 @@ export const ResourceProvider = ({ children }) => {
     },
   });
 
-  const createInitialDailyMetrics = () => {
+  const [dailyMetrics, setDailyMetrics] = useState(() => {
     const metrics = [];
     const baseWater = 220;
     const baseEnergy = 9;
@@ -63,9 +64,7 @@ export const ResourceProvider = ({ children }) => {
     }
 
     return metrics;
-  };
-
-  const [dailyMetrics, setDailyMetrics] = useState(createInitialDailyMetrics); // Historical daily data
+  }); // Historical daily data
   const [resourceAlerts, setResourceAlerts] = useState([]);
   const [optimizationSettings, setOptimizationSettings] = useState({
     waterTarget: 240,
