@@ -94,7 +94,7 @@ VITE_FIREBASE_APP_ID=your-app-id
 
 Getting Started
 
-Install dependencies
+git clone https://github.com/zeecool123/Farmsense.git
 
 cd Farmsense
 
