@@ -8,10 +8,18 @@ const Sidebar = () => {
 
   const navItems = [
     { path: '/', label: t('dashboard'), icon: '📊' },
+<<<<<<< Updated upstream
     { path: '/areas', label: t('areaManagement'), icon: '🌱' },
+=======
+    { path: '/areas', label: t('trayManagement'), icon: '🌱' },
+>>>>>>> Stashed changes
     { path: '/analytics', label: t('analyticsAndTrends'), icon: '📈' },
     { path: '/ml-insights', label: t('mlInsights'), icon: '🤖' },
     { path: '/ai-chat', label: t('aiChat', 'AI Assistant'), icon: '💬' },
+<<<<<<< Updated upstream
+=======
+    { path: '/smart-optimization', label: 'Smart Optimization', icon: '🌱' },
+>>>>>>> Stashed changes
     { path: '/settings', label: t('settings'), icon: '⚙️' },
   ];
 

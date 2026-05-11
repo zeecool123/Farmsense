@@ -7,7 +7,7 @@ import SensorReading from '../components/SensorReading';
 import { AREA_IDS } from '../utils/constants';
 
 const Dashboard = () => {
-  const { areas, alerts, sensorData, aiScores, simulateAnomaly, resetAnomaly } = useApp();
+  const { areas, alerts, sensorData, aiScores, simulateAnomaly, resetAnomaly, clearAlert } = useApp();
   const { t } = useLanguage();
   const [selectedArea, setSelectedArea] = useState(null);
 
@@ -133,22 +133,37 @@ const Dashboard = () => {
 
       {/* Selected Area Details */}
       {selectedAreaData && (
+<<<<<<< Updated upstream
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6 space-y-6 border border-slate-200 dark:border-slate-700">
+=======
+        <div className="bg-white rounded-lg shadow-md p-6 space-y-6">
+>>>>>>> Stashed changes
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{t('areaDetails', { areaId: selectedArea })}</h2>
             <button
               onClick={() => setSelectedArea(null)}
+<<<<<<< Updated upstream
               className="text-slate-400 hover:text-slate-600 dark:hover:text-white text-2xl"
+=======
+              className="text-gray-400 hover:text-gray-600 text-2xl"
+>>>>>>> Stashed changes
             >
               ✕
             </button>
           </div>
 
           {/* Area Info */}
+<<<<<<< Updated upstream
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 border-b border-slate-200 dark:border-slate-700 pb-4">
             <div>
               <p className="text-slate-600 dark:text-slate-400 text-sm">{t('cropLabel')}</p>
               <p className="text-lg font-bold flex items-center gap-2 text-slate-900 dark:text-white">
+=======
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 border-b pb-4">
+            <div>
+              <p className="text-gray-600 text-sm">{t('cropLabel')}</p>
+              <p className="text-lg font-bold flex items-center gap-2">
+>>>>>>> Stashed changes
                 {selectedAreaData.crop?.icon} {selectedAreaData.crop?.name}
               </p>
             </div>
@@ -159,8 +174,13 @@ const Dashboard = () => {
               </p>
             </div>
             <div>
+<<<<<<< Updated upstream
               <p className="text-slate-600 dark:text-slate-400 text-sm">{t('aiScoreLabel')}</p>
               <p className="text-lg font-bold text-blue-600 dark:text-blue-400">{aiScores[selectedArea] || 0}/100</p>
+=======
+              <p className="text-gray-600 text-sm">{t('aiScoreLabel')}</p>
+              <p className="text-lg font-bold text-blue-600">{aiScores[selectedArea] || 0}/100</p>
+>>>>>>> Stashed changes
             </div>
           </div>
 

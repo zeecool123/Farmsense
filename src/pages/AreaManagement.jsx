@@ -157,7 +157,11 @@ const AreaManagement = () => {
           {AREA_IDS.map((areaId) => (
             areas[areaId]?.crop && (
               <div key={areaId} className="border rounded-lg p-4">
+<<<<<<< Updated upstream
                 <h3 className="font-bold mb-3\">{t('area')} {areaId}</h3>
+=======
+                <h3 className="font-bold mb-3">{t('tray')} {areaId}</h3>
+>>>>>>> Stashed changes
                 <div className="space-y-2">
                   <button
                     onClick={() => triggerControl(areaId, 'LED', 'on')}

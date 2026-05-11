@@ -11,6 +11,10 @@ import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
 import MLInsights from './pages/MLInsights';
 import AIChat from './pages/AIChat';
+<<<<<<< Updated upstream
+=======
+import SmartOptimization from './pages/SmartOptimization';
+>>>>>>> Stashed changes
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 
