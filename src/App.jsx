@@ -6,7 +6,7 @@ import { LanguageProvider } from './context/LanguageContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
-import AreaManagement from './pages/AreaManagement';
+import TrayManagement from './pages/TrayManagement';
 import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
 import MLInsights from './pages/MLInsights';
@@ -55,6 +55,16 @@ function App() {
                   <ProtectedRoute>
                     <Layout>
                       <AreaManagement />
+                    </Layout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/hardware-sensor"
+                element={
+                  <ProtectedRoute>
+                    <Layout>
+                      <HardwareSensor />
                     </Layout>
                   </ProtectedRoute>
                 }

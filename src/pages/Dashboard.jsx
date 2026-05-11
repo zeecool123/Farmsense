@@ -37,25 +37,25 @@ const Dashboard = () => {
 
       {/* Overview Summary */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white dark:bg-slate-800 rounded-xl shadow p-6 border border-slate-100 dark:border-slate-700">
-          <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase">{t('activeAreas')}</p>
-          <p className="mt-3 text-4xl font-bold text-slate-900 dark:text-white">{summaryStats.activeAreas}</p>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">{t('areasCurrentlyOnline')}</p>
+        <div className="bg-white rounded-xl shadow p-6 border border-slate-100">
+          <p className="text-sm font-semibold text-slate-500 uppercase">{t('activeTrays')}</p>
+          <p className="mt-3 text-4xl font-bold text-slate-900">{summaryStats.activeTrays}</p>
+          <p className="text-sm text-slate-500 mt-2">{t('traysCurrentlyOnline')}</p>
         </div>
-        <div className="bg-white dark:bg-slate-800 rounded-xl shadow p-6 border border-slate-100 dark:border-slate-700">
-          <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase">{t('averageHealth')}</p>
-          <p className="mt-3 text-4xl font-bold text-slate-900 dark:text-white">{summaryStats.avgScore}%</p>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">{t('averageAIScore')}</p>
+        <div className="bg-white rounded-xl shadow p-6 border border-slate-100">
+          <p className="text-sm font-semibold text-slate-500 uppercase">{t('averageHealth')}</p>
+          <p className="mt-3 text-4xl font-bold text-slate-900">{summaryStats.avgScore}%</p>
+          <p className="text-sm text-slate-500 mt-2">{t('averageAIScore')}</p>
         </div>
-        <div className="bg-white dark:bg-slate-800 rounded-xl shadow p-6 border border-slate-100 dark:border-slate-700">
-          <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase">{t('activeAlerts')}</p>
-          <p className="mt-3 text-4xl font-bold text-slate-900 dark:text-white">{summaryStats.alertCount}</p>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">{t('openSystemNotifications')}</p>
+        <div className="bg-white rounded-xl shadow p-6 border border-slate-100">
+          <p className="text-sm font-semibold text-slate-500 uppercase">{t('activeAlerts')}</p>
+          <p className="mt-3 text-4xl font-bold text-slate-900">{summaryStats.alertCount}</p>
+          <p className="text-sm text-slate-500 mt-2">{t('openSystemNotifications')}</p>
         </div>
-        <div className="bg-white dark:bg-slate-800 rounded-xl shadow p-6 border border-slate-100 dark:border-slate-700">
-          <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase">{t('lastUpdate')}</p>
-          <p className="mt-3 text-4xl font-bold text-slate-900 dark:text-white">{summaryStats.latestUpdate}</p>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">{t('mostRecentSensorData')}</p>
+        <div className="bg-white rounded-xl shadow p-6 border border-slate-100">
+          <p className="text-sm font-semibold text-slate-500 uppercase">{t('lastUpdate')}</p>
+          <p className="mt-3 text-4xl font-bold text-slate-900">{summaryStats.latestUpdate}</p>
+          <p className="text-sm text-slate-500 mt-2">{t('mostRecentSensorData')}</p>
         </div>
       </div>
 
@@ -90,9 +90,30 @@ const Dashboard = () => {
             <li>{t('adjustPreferences')}</li>
           </ol>
         </div>
+            <li>{t('monitorLiveConditions')}</li>
+            <li>{t('trackTrends')}</li>
+            <li>{t('reviewAIInsights')}</li>
+            <li>{t('adjustPreferences')}</li>
+          </ol>
+        </div>
       </div>
 
-      {/* ML Insights Quick Link */}
+      {/* Alerts Section */}
+      {alerts.length > 0 && (
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold mb-4">{t('recentAlerts')} ({alerts.length})</h2>
+          <div className="max-w-3xl">
+            {alerts.slice(0, 5).map((alert) => (
+              <AlertBox
+                key={alert.id}
+                alert={alert}
+                onDismiss={() => clearAlert(alert.id)}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* ML Insights Quick Link */}
       <div className="mb-8">
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg shadow-md p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -132,43 +153,43 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Selected Area Details */}
-      {selectedAreaData && (
-        <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6 space-y-6 border border-slate-200 dark:border-slate-700">
+      {/* Selected Tray Details */}
+      {selectedTrayData && (
+        <div className="bg-white rounded-lg shadow-md p-6 space-y-6">
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-bold text-black dark:text-white">{t('areaDetails', { areaId: selectedArea })}</h2>
             <button
-              onClick={() => setSelectedArea(null)}
-              className="text-slate-400 hover:text-slate-600 dark:hover:text-white text-2xl"
+              onClick={() => setSelectedTray(null)}
+              className="text-gray-400 hover:text-gray-600 text-2xl"
             >
               ✕
             </button>
           </div>
 
-          {/* Area Info */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 border-b border-slate-200 dark:border-slate-700 pb-4">
+          {/* Tray Info */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 border-b pb-4">
             <div>
-              <p className="text-slate-600 dark:text-slate-400 text-sm">{t('cropLabel')}</p>
-              <p className="text-lg font-bold flex items-center gap-2 text-slate-900 dark:text-white">
-                {selectedAreaData.crop?.icon} {selectedAreaData.crop?.name}
+              <p className="text-gray-600 text-sm">{t('cropLabel')}</p>
+              <p className="text-lg font-bold flex items-center gap-2">
+                {selectedTrayData.crop?.icon} {selectedTrayData.crop?.name}
               </p>
             </div>
             <div>
-              <p className="text-slate-600 dark:text-slate-400 text-sm">{t('statusLabel')}</p>
+              <p className="text-gray-600 text-sm">{t('statusLabel')}</p>
               <p className="text-lg font-bold text-green-600">
-                🟢 {selectedAreaData.status}
+                🟢 {selectedTrayData.status}
               </p>
             </div>
             <div>
-              <p className="text-slate-600 dark:text-slate-400 text-sm">{t('aiScoreLabel')}</p>
-              <p className="text-lg font-bold text-blue-600 dark:text-blue-400">{aiScores[selectedArea] || 0}/100</p>
+              <p className="text-gray-600 text-sm">{t('aiScoreLabel')}</p>
+              <p className="text-lg font-bold text-blue-600">{aiScores[selectedTray] || 0}/100</p>
             </div>
           </div>
 
           {/* Real-time Sensor Data */}
           {selectedSensorData ? (
             <div>
-              <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">{t('liveSensorReadings')}</h3>
+              <h3 className="text-xl font-bold mb-4">{t('liveSensorReadings')}</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <SensorReading
                   label={t('temperature') || 'Temperature'}
@@ -216,12 +237,12 @@ const Dashboard = () => {
               </div>
             </div>
           ) : (
-            <p className="text-slate-500 dark:text-slate-400">{t('waitingForSensorData')}</p>
+            <p className="text-gray-500">{t('waitingForSensorData')}</p>
           )}
 
           {/* Test Controls */}
-          <div className="border-t border-slate-200 dark:border-slate-700 pt-4">
-            <h3 className="text-lg font-bold mb-3 text-slate-900 dark:text-white">{t('testControls')}</h3>
+          <div className="border-t pt-4">
+            <h3 className="text-lg font-bold mb-3">{t('testControls')}</h3>
             <div className="flex gap-2 flex-wrap">
               <button
                 onClick={() => simulateAnomaly(selectedArea, 'temperature')}
