@@ -3,21 +3,21 @@ import { useApp } from '../context/AppContext';
 import { useLanguage } from '../context/LanguageContext';
 import SensorChart from '../components/SensorChart';
 import SensorReading from '../components/SensorReading';
-import { TRAY_IDS } from '../utils/constants';
+import { AREA_IDS } from '../utils/constants';
 import { predictCropYield, predictHarvestTime } from '../utils/mlPredictions';
 
 const Analytics = () => {
-  const { trays, sensorData, aiScores, sensorHistory } = useApp();
+  const { areas, sensorData, aiScores, sensorHistory } = useApp();
   const { t } = useLanguage();
-  const [selectedTray, setSelectedTray] = useState('A');
+  const [selectedArea, setSelectedArea] = useState('A');
   const [chartData, setChartData] = useState([]);
   const [timeRange, setTimeRange] = useState(24); // hours
-  const selectedTrayHistory = sensorHistory[selectedTray] || [];
+  const selectedAreaHistory = sensorHistory[selectedArea] || [];
 
   useEffect(() => {
-    if (selectedTrayHistory.length > 1) {
+    if (selectedAreaHistory.length > 1) {
       setChartData(
-        selectedTrayHistory.map((entry) => ({
+        selectedAreaHistory.map((entry) => ({
           // MODIFIED: Added 'second: 2-digit' so the x-axis actually moves!
           time: new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
           temperature: entry.temperature,
@@ -51,20 +51,20 @@ const Analytics = () => {
       });
     }
     setChartData(data);
-  }, [selectedTray, timeRange, selectedTrayHistory]);
+  }, [selectedArea, timeRange, selectedAreaHistory]);
 
-  const currentSensorData = sensorData[selectedTray];
-  const tray = trays[selectedTray];
-  const historyForPrediction = selectedTrayHistory.length > 0 ? selectedTrayHistory : chartData;
+  const currentSensorData = sensorData[selectedArea];
+  const area = areas[selectedArea];
+  const historyForPrediction = selectedAreaHistory.length > 0 ? selectedAreaHistory : chartData;
 
   const yieldPrediction = useMemo(
-    () => (tray?.cropKey ? predictCropYield(historyForPrediction, tray.cropKey) : null),
-    [tray?.cropKey, historyForPrediction]
+    () => (area?.cropKey ? predictCropYield(historyForPrediction, area.cropKey) : null),
+    [area?.cropKey, historyForPrediction]
   );
 
   const harvestPrediction = useMemo(
-    () => (tray?.cropKey ? predictHarvestTime(tray.cropKey, historyForPrediction, 25) : null),
-    [tray?.cropKey, historyForPrediction]
+    () => (area?.cropKey ? predictHarvestTime(area.cropKey, historyForPrediction, 25) : null),
+    [area?.cropKey, historyForPrediction]
   );
 
   return (
@@ -79,15 +79,15 @@ const Analytics = () => {
       <div className="bg-white rounded-lg shadow-md p-6 mb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-semibold mb-2">{t('selectTrayLabel')}</label>
+            <label className="block text-sm font-semibold mb-2\">{t('selectAreaLabel')}</label>
             <select
-              value={selectedTray}
-              onChange={(e) => setSelectedTray(e.target.value)}
+              value={selectedArea}
+              onChange={(e) => setSelectedArea(e.target.value)}
               className="w-full border rounded px-4 py-2"
             >
-              {TRAY_IDS.map((tray) => (
-                <option key={tray} value={tray}>
-                  {t('tray')} {tray}
+              {AREA_IDS.map((area) => (
+                <option key={area} value={area}>
+                  {t('area')} {area}
                 </option>
               ))}
             </select>
@@ -119,7 +119,7 @@ const Analytics = () => {
             </div>
             <div>
               <p className="text-green-100 text-sm">{t('aiScoreLabel')}</p>
-              <p className="text-2xl font-bold">{aiScores[selectedTray] || 0}/100</p>
+              <p className="text-2xl font-bold">{aiScores[selectedArea] || 0}/100</p>
             </div>
             <div>
               <p className="text-green-100 text-sm">{t('statusLabel')}</p>
@@ -196,7 +196,7 @@ const Analytics = () => {
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-2xl font-bold mb-4">{t('yieldForecastHeading')}</h2>
             <p className="text-sm text-gray-600 mb-4">
-              {selectedTrayHistory.length > 0 ? t('usingRealSensorHistory') : t('usingFallbackTrendData')}
+              {selectedAreaHistory.length > 0 ? t('usingRealSensorHistory') : t('usingFallbackTrendData')}
             </p>
             <div className="space-y-3">
               <div className="text-5xl font-bold text-green-600">{yieldPrediction?.estimatedYield || t('noData')}</div>

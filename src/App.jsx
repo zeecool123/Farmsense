@@ -6,7 +6,7 @@ import { LanguageProvider } from './context/LanguageContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
-import TrayManagement from './pages/TrayManagement';
+import AreaManagement from './pages/AreaManagement';
 import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
 import MLInsights from './pages/MLInsights';
@@ -38,11 +38,11 @@ function App() {
                 }
               />
               <Route
-                path="/trays"
+                path="/areas"
                 element={
                   <ProtectedRoute>
                     <Layout>
-                      <TrayManagement />
+                      <AreaManagement />
                     </Layout>
                   </ProtectedRoute>
                 }

@@ -1,39 +1,39 @@
 /**
- * Hook for fetching and managing tray data
+ * Hook for fetching and managing area data
  */
 import { useState, useEffect } from 'react';
 
-export const useTray = (trayId) => {
-  const [tray, setTray] = useState(null);
+export const useArea = (areaId) => {
+  const [area, setArea] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const mockTray = {
-      id: trayId,
-      name: `Tray ${trayId}`,
+    const mockArea = {
+      id: areaId,
+      name: `Area ${areaId}`,
       status: 'online',
       lastUpdated: new Date().toISOString(),
       crop: null,
     };
 
-    setTray(mockTray);
+    setArea(mockArea);
     setLoading(false);
-  }, [trayId]);
+  }, [areaId]);
 
-  return { tray, loading, error };
+  return { area, loading, error };
 };
 
 /**
  * Hook for real-time sensor data
  */
-export const useSensorData = (trayId) => {
+export const useSensorData = (areaId) => {
   const [sensorData, setSensorData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(false);
-  }, [trayId]);
+  }, [areaId]);
 
   return { sensorData, loading };
 };

@@ -5,13 +5,13 @@ import { calculateAIScore } from '../utils/helpers';
 /**
  * Hook for real-time sensor data with simulator support
  */
-export const useSensorData = (trayId, cropKey, useSimulator = true) => {
+export const useSensorData = (areaId, cropKey, useSimulator = true) => {
   const [sensorData, setSensorData] = useState(null);
   const [aiScore, setAiScore] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!trayId || !cropKey) {
+    if (!areaId || !cropKey) {
       setLoading(false);
       return;
     }
@@ -20,7 +20,7 @@ export const useSensorData = (trayId, cropKey, useSimulator = true) => {
 
     if (useSimulator) {
       // Use local simulator
-      const simulator = SensorSimulatorRegistry.create(trayId, cropKey, 5000);
+      const simulator = SensorSimulatorRegistry.create(areaId, cropKey, 5000);
       simulator.start();
 
       unsubscribe = simulator.subscribe((data) => {
@@ -43,32 +43,32 @@ export const useSensorData = (trayId, cropKey, useSimulator = true) => {
       // Would connect to Firebase here
       setLoading(false);
     }
-  }, [trayId, cropKey, useSimulator]);
+  }, [areaId, cropKey, useSimulator]);
 
   return { sensorData, aiScore, loading };
 };
 
 /**
- * Hook for managing tray data
+ * Hook for managing area data
  */
-export const useTrayData = (trayId) => {
-  const [tray, setTray] = useState(null);
+export const useAreaData = (areaId) => {
+  const [area, setArea] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Simulate loading tray data
-    const mockTray = {
-      id: trayId,
-      name: `Tray ${trayId}`,
+    // Simulate loading area data
+    const mockArea = {
+      id: areaId,
+      name: `Area ${areaId}`,
       status: 'online',
       lastUpdated: new Date(),
     };
-    setTray(mockTray);
+    setArea(mockArea);
     setLoading(false);
-  }, [trayId]);
+  }, [areaId]);
 
-  return { tray, loading, error };
+  return { area, loading, error };
 };
 
 /**
@@ -78,11 +78,11 @@ export const useControl = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const triggerControl = useCallback(async (trayId, controlType, action, duration = null) => {
+  const triggerControl = useCallback(async (areaId, controlType, action, duration = null) => {
     setLoading(true);
     try {
       // Simulate control trigger
-      console.log(`Triggering ${controlType} control on Tray ${trayId}: ${action}`);
+      console.log(`Triggering ${controlType} control on Area ${areaId}: ${action}`);
       setLoading(false);
       return true;
     } catch (err) {

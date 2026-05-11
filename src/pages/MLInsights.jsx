@@ -3,7 +3,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 
 import { useApp } from '../context/AppContext';
 import { useLanguage } from '../context/LanguageContext';
-import { TRAY_IDS } from '../utils/constants';
+import { AREA_IDS } from '../utils/constants';
 import {
   predictCropYield,
   predictHarvestTime,
@@ -18,18 +18,18 @@ import {
 } from '../utils/mlPredictions';
 
 const MLInsights = () => {
-  const { trays, sensorData, sensorHistory } = useApp();
+  const { areas, sensorData, sensorHistory } = useApp();
   const { t } = useLanguage();
-  const [selectedTray, setSelectedTray] = useState('A');
+  const [selectedArea, setSelectedArea] = useState('A');
   const [growthStage, setGrowthStage] = useState('vegetative');
 
   const [aiRecommendations, setAiRecommendations] = useState(null);
 
 
 
-  const tray = trays[selectedTray];
-  const currentSensorData = sensorData[selectedTray];
-  const selectedTrayHistory = sensorHistory[selectedTray] || [];
+  const area = areas[selectedArea];
+  const currentSensorData = sensorData[selectedArea];
+  const selectedAreaHistory = sensorHistory[selectedArea] || [];
 
 
   // Load AI recommendations
@@ -37,7 +37,7 @@ const MLInsights = () => {
     const loadRecommendations = async () => {
       if (tray?.cropKey && currentSensorData) {
         try {
-          const recs = await getAIRecommendations(tray.cropKey, currentSensorData);
+          const recs = await getAIRecommendations(area.cropKey, currentSensorData);
           setAiRecommendations(recs);
         } catch (error) {
           console.error('Error loading AI recommendations:', error);
@@ -48,7 +48,7 @@ const MLInsights = () => {
       }
     };
     loadRecommendations();
-  }, [tray?.cropKey, currentSensorData]);
+  }, [area?.cropKey, currentSensorData]);
 
 
   const mockHistory = useMemo(() => {
@@ -59,45 +59,45 @@ const MLInsights = () => {
       ph: (currentSensorData?.ph || 6.5) + (Math.random() - 0.5) * 0.3,
       waterUsage: (currentSensorData?.waterUsage || 150) + (Math.random() - 0.5) * 50,
     }));
-  }, [selectedTray, currentSensorData]);
+  }, [selectedArea, currentSensorData]);
 
-  const historyForPrediction = selectedTrayHistory.length > 0 ? selectedTrayHistory : mockHistory;
+  const historyForPrediction = selectedAreaHistory.length > 0 ? selectedAreaHistory : mockHistory;
 
   const yieldPrediction = useMemo(
-    () => (tray?.cropKey ? predictCropYield(historyForPrediction, tray.cropKey) : null),
-    [tray?.cropKey, historyForPrediction]
+    () => (area?.cropKey ? predictCropYield(historyForPrediction, area.cropKey) : null),
+    [area?.cropKey, historyForPrediction]
   );
 
   const harvestPrediction = useMemo(
-    () => (tray?.cropKey ? predictHarvestTime(tray.cropKey, historyForPrediction, 25) : null),
-    [tray?.cropKey, historyForPrediction]
+    () => (area?.cropKey ? predictHarvestTime(area.cropKey, historyForPrediction, 25) : null),
+    [area?.cropKey, historyForPrediction]
   );
 
   const nutrients = useMemo(
-    () => tray?.cropKey ? estimateNutrientRequirements(tray.cropKey, historyForPrediction, growthStage) : null,
-    [tray?.cropKey, historyForPrediction, growthStage]
+    () => area?.cropKey ? estimateNutrientRequirements(area.cropKey, historyForPrediction, growthStage) : null,
+    [area?.cropKey, historyForPrediction, growthStage]
   );
 
   const water = useMemo(
     () =>
-      tray?.cropKey && currentSensorData
-        ? predictWaterConsumption(tray.cropKey, currentSensorData.temperature, currentSensorData.humidity)
+      area?.cropKey && currentSensorData
+        ? predictWaterConsumption(area.cropKey, currentSensorData.temperature, currentSensorData.humidity)
         : null,
-    [tray?.cropKey, currentSensorData]
+    [area?.cropKey, currentSensorData]
   );
 
   const efficiency = useMemo(() => predictResourceEfficiency(historyForPrediction), [historyForPrediction]);
 
   const anomalies = useMemo(
-    () => tray?.cropKey ? predictAnomalies(historyForPrediction, tray.cropKey) : null,
-    [tray?.cropKey, historyForPrediction]
+    () => area?.cropKey ? predictAnomalies(historyForPrediction, area.cropKey) : null,
+    [area?.cropKey, historyForPrediction]
   );
 
-  if (!tray) {
+  if (!area) {
     return (
       <div className="p-8">
         <h1 className="text-4xl font-bold text-gray-800 mb-2">{t('mlInsights')}</h1>
-        <p className="text-gray-600">{t('noTraySelected')}</p>
+        <p className="text-gray-600">{t('noAreaSelected')}</p>
       </div>
     );
   }
@@ -118,13 +118,13 @@ const MLInsights = () => {
           <div>
             <label className="block text-sm font-semibold mb-2">{t('selectTrayLabel')}</label>
             <select
-              value={selectedTray}
-              onChange={(e) => setSelectedTray(e.target.value)}
+              value={selectedArea}
+              onChange={(e) => setSelectedArea(e.target.value)}
               className="w-full border rounded px-4 py-2"
             >
-              {TRAY_IDS.map((id) => (
+              {AREA_IDS.map((id) => (
                 <option key={id} value={id}>
-                  {t('tray')} {id} {trays[id]?.crop?.icon}
+                  {t('area')} {id} {areas[id]?.crop?.icon}
                 </option>
               ))}
             </select>

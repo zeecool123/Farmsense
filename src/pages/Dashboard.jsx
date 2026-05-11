@@ -2,32 +2,31 @@ import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { useLanguage } from '../context/LanguageContext';
-import TrayCard from '../components/TrayCard';
+import AreaCard from '../components/AreaCard';
 import SensorReading from '../components/SensorReading';
-import HardwareSensorDashboard from '../components/HardwareSensorDashboard';
-import { TRAY_IDS } from '../utils/constants';
+import { AREA_IDS } from '../utils/constants';
 
 const Dashboard = () => {
-  const { trays, alerts, sensorData, aiScores, simulateAnomaly, resetAnomaly } = useApp();
+  const { areas, alerts, sensorData, aiScores, simulateAnomaly, resetAnomaly } = useApp();
   const { t } = useLanguage();
-  const [selectedTray, setSelectedTray] = useState(null);
+  const [selectedArea, setSelectedArea] = useState(null);
 
-  const selectedTrayData = selectedTray ? trays[selectedTray] : null;
-  const selectedSensorData = selectedTray ? sensorData[selectedTray] : null;
+  const selectedAreaData = selectedArea ? areas[selectedArea] : null;
+  const selectedSensorData = selectedArea ? sensorData[selectedArea] : null;
 
   const summaryStats = useMemo(() => {
-    const activeTrays = TRAY_IDS.filter((trayId) => trays[trayId]?.status === 'online').length;
-    const avgScore = TRAY_IDS.reduce((sum, trayId) => sum + (aiScores[trayId] || 0), 0) / TRAY_IDS.length || 0;
+    const activeAreas = AREA_IDS.filter((areaId) => areas[areaId]?.status === 'online').length;
+    const avgScore = AREA_IDS.reduce((sum, areaId) => sum + (aiScores[areaId] || 0), 0) / AREA_IDS.length || 0;
     const latestUpdate = Math.max(
-      ...TRAY_IDS.map((trayId) => sensorData[trayId]?.timestamp?.getTime() || 0)
+      ...AREA_IDS.map((areaId) => sensorData[areaId]?.timestamp?.getTime() || 0)
     );
     return {
-      activeTrays,
+      activeAreas,
       avgScore: Math.round(avgScore),
       latestUpdate: latestUpdate ? new Date(latestUpdate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : t('noData'),
       alertCount: alerts.length,
     };
-  }, [trays, alerts, aiScores, sensorData, t]);
+  }, [areas, alerts, aiScores, sensorData, t]);
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
@@ -39,9 +38,9 @@ const Dashboard = () => {
       {/* Overview Summary */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
         <div className="bg-white dark:bg-slate-800 rounded-xl shadow p-6 border border-slate-100 dark:border-slate-700">
-          <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase">{t('activeTrays')}</p>
-          <p className="mt-3 text-4xl font-bold text-slate-900 dark:text-white">{summaryStats.activeTrays}</p>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">{t('traysCurrentlyOnline')}</p>
+          <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase">{t('activeAreas')}</p>
+          <p className="mt-3 text-4xl font-bold text-slate-900 dark:text-white">{summaryStats.activeAreas}</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">{t('areasCurrentlyOnline')}</p>
         </div>
         <div className="bg-white dark:bg-slate-800 rounded-xl shadow p-6 border border-slate-100 dark:border-slate-700">
           <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase">{t('averageHealth')}</p>
@@ -66,8 +65,8 @@ const Dashboard = () => {
           <h2 className="text-2xl font-bold mb-3">{t('quickActions')}</h2>
           <p className="text-cyan-100 mb-4">{t('jumpIntoWorkflows')}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Link to="/trays" className="rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white px-4 py-3 font-semibold text-sm shadow transition backdrop-blur-sm">
-              {t('manageTrays')}
+            <Link to="/areas" className="rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white px-4 py-3 font-semibold text-sm shadow transition backdrop-blur-sm">
+              {t('manageAreas')}
             </Link>
             <Link to="/analytics" className="rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white px-4 py-3 font-semibold text-sm shadow transition backdrop-blur-sm">
               {t('viewAnalytics')}
@@ -84,7 +83,7 @@ const Dashboard = () => {
         <div className="bg-white dark:bg-slate-800 rounded-xl shadow p-6 border border-slate-100 dark:border-slate-700">
           <h2 className="text-2xl font-bold mb-3 text-slate-900 dark:text-white">{t('howToUseFarmsense')}</h2>
           <ol className="list-decimal list-inside space-y-3 text-slate-700 dark:text-slate-300">
-            <li>{t('assignYourTrays')}</li>
+            <li>{t('assignYourAreas')}</li>
             <li>{t('monitorLiveConditions')}</li>
             <li>{t('trackTrends')}</li>
             <li>{t('reviewAIInsights')}</li>
@@ -112,33 +111,33 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Trays Grid */}
+      {/* Areas Grid */}
       <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white">{t('trayStatus')}</h2>
+        <h2 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white">{t('areaStatus')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {TRAY_IDS.map((trayId) => {
-            const tray = trays[trayId];
+          {AREA_IDS.map((areaId) => {
+            const area = areas[areaId];
             return (
-              <TrayCard
-                key={trayId}
-                trayId={trayId}
-                crop={tray?.crop}
-                aiScore={aiScores[trayId] || 0}
-                status={tray?.status || 'offline'}
-                onClick={() => setSelectedTray(selectedTray === trayId ? null : trayId)}
+              <AreaCard
+                key={areaId}
+                areaId={areaId}
+                crop={area?.crop}
+                aiScore={aiScores[areaId] || 0}
+                status={area?.status || 'offline'}
+                onClick={() => setSelectedArea(selectedArea === areaId ? null : areaId)}
               />
             );
           })}
         </div>
       </div>
 
-      {/* Selected Tray Details */}
-      {selectedTrayData && (
+      {/* Selected Area Details */}
+      {selectedAreaData && (
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6 space-y-6 border border-slate-200 dark:border-slate-700">
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{t('trayDetails', { trayId: selectedTray })}</h2>
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{t('areaDetails', { areaId: selectedArea })}</h2>
             <button
-              onClick={() => setSelectedTray(null)}
+              onClick={() => setSelectedArea(null)}
               className="text-slate-400 hover:text-slate-600 dark:hover:text-white text-2xl"
             >
               ✕

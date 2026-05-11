@@ -6,7 +6,7 @@ import { CROP_PROFILES } from '../utils/constants';
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-  const [trays, setTrays] = useState({});
+  const [areas, setAreas] = useState({});
   const [alerts, setAlerts] = useState([]);
   const [sensorData, setSensorData] = useState({});
   const [aiScores, setAiScores] = useState({});
@@ -19,14 +19,14 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     const initializeSensors = async () => {
       setLoading(true);
-      const trayIds = ['A', 'B', 'C', 'D', 'E', 'F'];
+      const areaIds = ['A', 'B', 'C', 'D', 'E', 'F'];
       const cropKeys = Object.keys(CROP_PROFILES);
 
-      trayIds.forEach((id, index) => {
+      areaIds.forEach((id, index) => {
         const cropKey = cropKeys[index % cropKeys.length];
         const crop = CROP_PROFILES[cropKey];
         
-        setTrays((prev) => ({
+        setAreas((prev) => ({
           ...prev,
           [id]: {
             id,
@@ -72,12 +72,12 @@ export const AppProvider = ({ children }) => {
     };
   }, [useSimulator]);
 
-  const checkForAnomalies = useCallback((trayId, crop, sensorData, aiScore) => {
+  const checkForAnomalies = useCallback((areaId, crop, sensorData, aiScore) => {
     const alerts_to_add = [];
 
     if (sensorData.temperature < crop.optimalTemp.min - 2 || sensorData.temperature > crop.optimalTemp.max + 2) {
       alerts_to_add.push({
-        trayId,
+        areaId,
         severity: 'warning',
         title: '🌡️ Temperature Alert',
         message: `Temperature is ${sensorData.temperature}°C (optimal: ${crop.optimalTemp.min}-${crop.optimalTemp.max}°C)`,
@@ -86,7 +86,7 @@ export const AppProvider = ({ children }) => {
 
     if (sensorData.humidity < crop.optimalHumidity.min - 5 || sensorData.humidity > crop.optimalHumidity.max + 5) {
       alerts_to_add.push({
-        trayId,
+        areaId,
         severity: 'warning',
         title: '💧 Humidity Alert',
         message: `Humidity is ${sensorData.humidity}% (optimal: ${crop.optimalHumidity.min}-${crop.optimalHumidity.max}%)`,
@@ -95,7 +95,7 @@ export const AppProvider = ({ children }) => {
 
     if (sensorData.ph < crop.optimalPH.min - 0.3 || sensorData.ph > crop.optimalPH.max + 0.3) {
       alerts_to_add.push({
-        trayId,
+        areaId,
         severity: 'warning',
         title: '⚗️ pH Alert',
         message: `pH level is ${sensorData.ph} (optimal: ${crop.optimalPH.min}-${crop.optimalPH.max})`,
@@ -104,16 +104,16 @@ export const AppProvider = ({ children }) => {
 
     if (aiScore >= 95) {
       alerts_to_add.push({
-        trayId,
+        areaId,
         severity: 'info',
         title: '✨ Perfect Match',
-        message: `Tray ${trayId} has reached perfect conditions! Replicating parameters.`,
+        message: `Area ${areaId} has reached perfect conditions! Replicating parameters.`,
       });
     }
 
     alerts_to_add.forEach((alert) => {
       const exists = alerts.some(
-        (a) => a.trayId === alert.trayId && a.title === alert.title
+        (a) => a.areaId === alert.areaId && a.title === alert.title
       );
       if (!exists) {
         addAlert(alert);
@@ -121,19 +121,19 @@ export const AppProvider = ({ children }) => {
     });
   }, [alerts]);
 
-  const addSensorHistory = useCallback((trayId, entry) => {
+  const addSensorHistory = useCallback((areaId, entry) => {
     setSensorHistory((prev) => {
-      const history = prev[trayId] ? [...prev[trayId]] : [];
+      const history = prev[areaId] ? [...prev[areaId]] : [];
       history.push(entry);
       if (history.length > MAX_HISTORY_LENGTH) history.shift();
-      return { ...prev, [trayId]: history };
+      return { ...prev, [areaId]: history };
     });
   }, []);
 
-  const updateTray = useCallback((trayId, trayData) => {
-    setTrays((prev) => ({
+  const updateArea = useCallback((areaId, areaData) => {
+    setAreas((prev) => ({
       ...prev,
-      [trayId]: { ...prev[trayId], ...trayData },
+      [areaId]: { ...prev[areaId], ...areaData },
     }));
   }, []);
 
@@ -157,55 +157,55 @@ export const AppProvider = ({ children }) => {
     setAlerts((prev) => prev.filter((a) => a.id !== alertId));
   }, []);
 
-  const updateSensorData = useCallback((trayId, data) => {
+  const updateSensorData = useCallback((areaId, data) => {
     const timestamp = new Date();
-    const entry = { ...data, timestamp, aiScore: aiScores[trayId] || 0 };
+    const entry = { ...data, timestamp, aiScore: aiScores[areaId] || 0 };
 
     setSensorData((prev) => ({
       ...prev,
-      [trayId]: {
-        ...prev[trayId],
+      [areaId]: {
+        ...prev[areaId],
         ...data,
         timestamp,
       },
     }));
 
     setSensorHistory((prev) => {
-      const history = prev[trayId] ? [...prev[trayId]] : [];
+      const history = prev[areaId] ? [...prev[areaId]] : [];
       history.push(entry);
       if (history.length > MAX_HISTORY_LENGTH) history.shift();
-      return { ...prev, [trayId]: history };
+      return { ...prev, [areaId]: history };
     });
   }, [aiScores]);
 
-  const triggerControl = useCallback((trayId, controlType, action) => {
-    console.log(`Control: ${controlType} -> ${action} on Tray ${trayId}`);
+  const triggerControl = useCallback((areaId, controlType, action) => {
+    console.log(`Control: ${controlType} -> ${action} on Area ${areaId}`);
     addAlert({
-      trayId,
+      areaId,
       severity: 'info',
       title: `🎛️ ${controlType.toUpperCase()} Control`,
       message: `${controlType} system has been ${action}`,
     });
   }, [addAlert]);
 
-  const simulateAnomaly = useCallback((trayId, type = 'temperature') => {
-    const simulator = SensorSimulatorRegistry.get(trayId);
+  const simulateAnomaly = useCallback((areaId, type = 'temperature') => {
+    const simulator = SensorSimulatorRegistry.get(areaId);
     if (simulator) {
       simulator.simulateAnomaly(type, 'high');
     }
   }, []);
 
-  const resetAnomaly = useCallback((trayId) => {
-    const simulator = SensorSimulatorRegistry.get(trayId);
+  const resetAnomaly = useCallback((areaId) => {
+    const simulator = SensorSimulatorRegistry.get(areaId);
     if (simulator) {
       simulator.resetAnomaly();
     }
   }, []);
 
   const value = {
-    trays,
-    setTrays,
-    updateTray,
+    areas,
+    setAreas,
+    updateArea,
     alerts,
     addAlert,
     clearAlert,
