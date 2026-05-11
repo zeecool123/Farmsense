@@ -96,7 +96,7 @@ Getting Started
 
 Install dependencies
 
-cd HiveDeliver
+cd Farmsense
 
 npm install
 
