@@ -91,12 +91,6 @@ const Dashboard = () => {
             <li>{t('adjustPreferences')}</li>
           </ol>
         </div>
-            <li>{t('monitorLiveConditions')}</li>
-            <li>{t('trackTrends')}</li>
-            <li>{t('reviewAIInsights')}</li>
-            <li>{t('adjustPreferences')}</li>
-          </ol>
-        </div>
       </div>
 
       {/* Alerts Section */}
@@ -154,20 +148,14 @@ const Dashboard = () => {
         </div>
       </div>
 
+      {/* Selected Area Details */}
+      {selectedAreaData && (
         <div className="bg-white rounded-lg shadow-md p-6 space-y-6">
-=======
-      {/* Selected Tray Details */}
-      {selectedTrayData && (
-        <div className="bg-white rounded-lg shadow-md p-6 space-y-6">
-
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-bold text-black dark:text-white">{t('areaDetails', { areaId: selectedArea })}</h2>
             <button
+              onClick={() => setSelectedArea(null)}
               className="text-gray-400 hover:text-gray-600 text-2xl"
-=======
-              onClick={() => setSelectedTray(null)}
-              className="text-gray-400 hover:text-gray-600 text-2xl"
-
             >
               ✕
             </button>
@@ -178,29 +166,17 @@ const Dashboard = () => {
               <p className="text-gray-600 text-sm">{t('cropLabel')}</p>
               <p className="text-lg font-bold flex items-center gap-2">
                 {selectedAreaData.crop?.icon} {selectedAreaData.crop?.name}
-=======
-          {/* Tray Info */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 border-b pb-4">
-            <div>
-              <p className="text-gray-600 text-sm">{t('cropLabel')}</p>
-              <p className="text-lg font-bold flex items-center gap-2">
-                {selectedTrayData.crop?.icon} {selectedTrayData.crop?.name}
-
               </p>
             </div>
             <div>
               <p className="text-gray-600 text-sm">{t('statusLabel')}</p>
               <p className="text-lg font-bold text-green-600">
-                🟢 {selectedTrayData.status}
+                🟢 {selectedAreaData.status}
               </p>
             </div>
             <div>
               <p className="text-gray-600 text-sm">{t('aiScoreLabel')}</p>
               <p className="text-lg font-bold text-blue-600">{aiScores[selectedArea] || 0}/100</p>
-=======
-              <p className="text-gray-600 text-sm">{t('aiScoreLabel')}</p>
-              <p className="text-lg font-bold text-blue-600">{aiScores[selectedTray] || 0}/100</p>
-
             </div>
           </div>
 
