@@ -3,7 +3,7 @@
  * Manages state for resource tracking (water, electricity, costs)
  */
 
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback } from 'react';
 
 const ResourceContext = createContext();
 
@@ -37,7 +37,35 @@ export const ResourceProvider = ({ children }) => {
     },
   });
 
-  const [dailyMetrics, setDailyMetrics] = useState([]); // Historical daily data
+  const createInitialDailyMetrics = () => {
+    const metrics = [];
+    const baseWater = 220;
+    const baseEnergy = 9;
+
+    for (let i = 6; i >= 0; i -= 1) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      const water = Math.max(1, Math.round(baseWater + (Math.random() - 0.5) * 40));
+      const energy = Math.max(0.5, Math.round(baseEnergy + (Math.random() - 0.5) * 2));
+      const waterCost = Math.round(water * resourceData.water.cost * 100) / 100;
+      const energyCost = Math.round(energy * resourceData.electricity.cost * 100) / 100;
+
+      metrics.push({
+        date: date.toISOString().split('T')[0],
+        water,
+        waterCost,
+        energy,
+        energyCost,
+        totalCost: Math.round((waterCost + energyCost) * 100) / 100,
+        cropsHarvested: 0,
+        timestamp: date.toISOString(),
+      });
+    }
+
+    return metrics;
+  };
+
+  const [dailyMetrics, setDailyMetrics] = useState(createInitialDailyMetrics); // Historical daily data
   const [resourceAlerts, setResourceAlerts] = useState([]);
   const [optimizationSettings, setOptimizationSettings] = useState({
     waterTarget: 240,
@@ -79,7 +107,17 @@ export const ResourceProvider = ({ children }) => {
     const recent = dailyMetrics.slice(-days);
 
     if (recent.length === 0) {
-      return { water: 0, electricity: 0, cost: 0 };
+      const defaultCost =
+        Math.round(
+          (resourceData.water.target * resourceData.water.cost + resourceData.electricity.target * resourceData.electricity.cost) * 100
+        ) / 100;
+      return {
+        water: resourceData.water.target,
+        electricity: resourceData.electricity.target,
+        cost: defaultCost,
+        period: `${days}d`,
+        dataPoints: [],
+      };
     }
 
     const totalWater = recent.reduce((sum, m) => sum + m.water, 0);
@@ -93,7 +131,7 @@ export const ResourceProvider = ({ children }) => {
       period: `${days}d`,
       dataPoints: recent,
     };
-  }, [dailyMetrics]);
+  }, [dailyMetrics, resourceData]);
 
   // Get efficiency scores
   const getEfficiencyScores = useCallback(() => {
