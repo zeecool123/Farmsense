@@ -12,8 +12,14 @@ import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
 import MLInsights from './pages/MLInsights';
 import AIChat from './pages/AIChat';
+
+
+
+import SmartOptimization from './pages/SmartOptimization';
+
 import HardwareSensor from './pages/HardwareSensor';
 import SmartOptimization from './pages/SmartOptimization';
+
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 
